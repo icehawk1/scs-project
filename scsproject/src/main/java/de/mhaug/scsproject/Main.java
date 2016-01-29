@@ -2,8 +2,10 @@ package de.mhaug.scsproject;
 
 import java.io.IOException;
 import java.net.URI;
+import java.net.URISyntaxException;
 
 import org.glassfish.grizzly.http.server.HttpServer;
+import org.glassfish.grizzly.http.server.StaticHttpHandler;
 import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpServerFactory;
 import org.glassfish.jersey.server.ResourceConfig;
 
@@ -25,11 +27,20 @@ public class Main {
 		// create a resource config that scans for JAX-RS resources and
 		// providers
 		// in de.mhaug.scsproject package
-		final ResourceConfig rc = new ResourceConfig().packages("de.mhaug.scsproject");
+		final ResourceConfig rc = new ResourceConfig().packages("de.mhaug.scsproject.webui");
 
 		// create and start a new instance of grizzly http server
 		// exposing the Jersey application at BASE_URI
-		return GrizzlyHttpServerFactory.createHttpServer(URI.create(BASE_URI), rc);
+		HttpServer result = GrizzlyHttpServerFactory.createHttpServer(URI.create(BASE_URI), rc);
+
+		// Add handler which serves static files
+		result.getServerConfiguration().addHttpHandler(new StaticHttpHandler("src/resources/staticfiles"), "/static");
+
+		return result;
+	}
+
+	private static String getTemplatePath() throws URISyntaxException {
+		return Main.class.getClassLoader().getResource("resources/staticfiles").getPath();
 	}
 
 	/**
