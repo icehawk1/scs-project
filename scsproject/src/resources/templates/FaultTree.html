@@ -13,15 +13,13 @@
 		        container:"box",
 		        view:"tree",
 				data: [
-					{id:"root", value:"Cars", open:true, data:[
-						{ id:"1", open:true, value:"Toyota", data:[
-							{ id:"1.1", value:"Avalon" },
-							{ id:"1.2", value:"Corolla" },
-							{ id:"1.3", value:"Camry" }
-						]},
-						{ id:"2", open:true, value:"Skoda", data:[
-							{ id:"2.1", value:"Octavia" },
-							{ id:"2.2", value:"Superb" }
+					{id:"root", value:"ups, puttmacht :(", open:true, data:[
+						{ id:"OR", open:true, value:"OR", data:[
+							{ id:"1", value:"Fehlerquelle 1" },
+							{ id:"2", value:"Fehlerquelle 2" },
+							{ id:"3", value:"Fehlerquelle 3",
+								data:[{id:"3.and",value:"AND",
+									data:[ {id:"3.1",value:"Untererror 1"}, {id:"3.2", value:"Untererror 2"}]} ] }
 						]}
 					]}
 				]
@@ -32,6 +30,6 @@
 
     </script>
 
-	<div id="box" style="width:400px;height:200px;"></div>
+	<div id="box" style="width:800px;height:400px;"></div>
 </body>
 </html>
