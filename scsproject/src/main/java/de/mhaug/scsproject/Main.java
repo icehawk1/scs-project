@@ -34,7 +34,8 @@ public class Main {
 		HttpServer result = GrizzlyHttpServerFactory.createHttpServer(URI.create(BASE_URI), rc);
 
 		// Add handler which serves static files
-		result.getServerConfiguration().addHttpHandler(new StaticHttpHandler("src/resources/staticfiles"), "/static");
+		result.getServerConfiguration().addHttpHandler(new StaticHttpHandler("src/resources/staticfiles"),
+				"/staticfiles");
 
 		return result;
 	}

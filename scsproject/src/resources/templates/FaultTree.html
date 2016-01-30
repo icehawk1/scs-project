@@ -3,33 +3,44 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>Quick start with Tree</title>
-    <script src="/static/codebase/webix.js" type="text/javascript" charset="utf-8"></script>
-    <link rel="stylesheet" href="/static/codebase/webix.css" type="text/css" charset="utf-8">
+    <link rel="stylesheet" type="text/css" href="/staticfiles/treetest.css">
 </head>
 <body>
-    <script>
-	webix.ready(function(){
-		tree = new webix.ui({
-		        container:"box",
-		        view:"tree",
-				data: [
-					{id:"root", value:"ups, puttmacht :(", open:true, data:[
-						{ id:"OR", open:true, value:"OR", data:[
-							{ id:"1", value:"Fehlerquelle 1" },
-							{ id:"2", value:"Fehlerquelle 2" },
-							{ id:"3", value:"Fehlerquelle 3",
-								data:[{id:"3.and",value:"AND",
-									data:[ {id:"3.1",value:"Untererror 1"}, {id:"3.2", value:"Untererror 2"}]} ] }
-						]}
-					]}
-				]
-		})
-	});
-
-
-
-    </script>
-
-	<div id="box" style="width:800px;height:400px;"></div>
+	<div class="tree">
+		<ul>
+			<li>
+				<a href="#">Alles putt :(</a>
+				<ul>
+					<li>
+						<a href="#">OR</a>
+						<ul>
+							<li>
+								<a href="#">Ereignis 1</a>
+							</li>
+							<li>
+								<a href="#">Ereignis 2</a>
+								<ul>
+									<li>
+										<a href="#">AND</a>
+										<ul>
+											<li>
+												<a href="#">Unterereignis 2.1</a>
+											</li>
+											<li>
+												<a href="#">Unterereignis 2.2</a>
+											</li>
+										</ul>
+									</li>
+								</ul>
+							</li>
+							<li>
+								<a href="#">Ereignis 3</a>
+							</li>
+						</ul>
+					</li>
+				</ul>
+			</li>
+		</ul>
+	</div>
 </body>
 </html>
