@@ -1,0 +1,73 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+		 <meta charset="UTF-8">
+
+		<link rel="stylesheet" type="text/css" href="/staticfiles/backgrid/backgrid.css">
+	<script src="/staticfiles/jquery-min.js" type="text/javascript"></script>
+		<script src="/staticfiles/underscore-min.js" type="text/javascript"></script>
+	<script src="/staticfiles/backbone-min.js" type="text/javascript"></script>
+    <script src="/staticfiles/backgrid/backgrid.js" type="text/javascript"></script>
+    </head>
+    <body>
+		<div id="listspace" class="backgrid-container"></div>
+        <script type="text/javascript" charset="utf-8">
+		var Territory = Backbone.Model.extend({});
+		var Territories = Backbone.Collection.extend({
+		  model: Territory,
+		  url: "/staticfiles/territories.json"
+		});
+		var territories = new Territories();
+
+		var columns = [{
+		    name: "id", // The key of the model attribute
+		    label: "ID", // The name to display in the header
+		    editable: false, // By default every cell in a column is editable, but *ID* shouldn't be
+		    // Defines a cell type, and ID is displayed as an integer without the ',' separating 1000s.
+		    cell: Backgrid.IntegerCell.extend({
+		      orderSeparator: ''
+		    })
+		  }, {
+		    name: "name",
+		    label: "Name",
+		    // The cell type can be a reference of a Backgrid.Cell subclass, any Backgrid.Cell subclass instances like *id* above, or a string
+		    cell: "string" // This is converted to "StringCell" and a corresponding class in the Backgrid package namespace is looked up
+		  }, {
+		    name: "joiner",
+		    label: "Joiner",
+		    cell: "string" // An integer cell is a number cell that displays humanized integers
+		  }, {
+		    name: "children",
+		    label: "Children",
+		    cell: "string" // A cell type for floating point value, defaults to have a precision 2 decimal numbers
+		  }, {
+		    name: "comment",
+		    label: "Comment",
+		    cell: "string"
+		  }];
+
+		// Initialize a new Grid instance
+		var grid = new Backgrid.Grid({
+		  columns: columns,
+		  collection: territories
+		});
+
+		// Render the grid and attach the root to your HTML document
+		$("#listspace").append(grid.render().el);
+
+		// Fetch some countries from the url
+		territories.fetch({reset: true});
+        </script>
+
+		<p>
+			<form action="/FaultList" id="testform" method="post">
+				<label id="h2" form="form_2">Namenseingabe</label>
+				<label for="vorname">Vorname</label> <input type="text" id="v" name="vorname" maxlength="30">
+				<label for="zuname">Zuname</label> <input type="text" id="z" name="zuname" maxlength="40">
+				<button type="reset">Eingaben zurücksetzen</button>
+				<button type="submit">Eingaben absenden</button>
+			</form>
+		</p>
+    </body>
+
+</html>
