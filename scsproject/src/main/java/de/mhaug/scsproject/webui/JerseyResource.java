@@ -6,6 +6,11 @@ import java.io.StringWriter;
 import org.apache.velocity.app.Velocity;
 import org.apache.velocity.context.Context;
 
+/**
+ * Base class for all resources that can be accessed via the web.
+ * 
+ * @author martin
+ */
 abstract class JerseyResource {
 	public String mergeVelocityTemplate(String templatename, Context context) {
 		StringWriter writer = new StringWriter();
