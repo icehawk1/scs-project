@@ -6,41 +6,25 @@
     <link rel="stylesheet" type="text/css" href="/staticfiles/treetest.css">
 </head>
 <body>
-	<div class="tree">
-		<ul>
-			<li>
-				<a href="#">Alles putt :(</a>
-				<ul>
-					<li>
-						<a href="#">OR</a>
-						<ul>
-							<li>
-								<a href="#">Ereignis 1</a>
-							</li>
-							<li>
-								<a href="#">Ereignis 2</a>
-								<ul>
-									<li>
-										<a href="#">AND</a>
-										<ul>
-											<li>
-												<a href="#">Unterereignis 2.1</a>
-											</li>
-											<li>
-												<a href="#">Unterereignis 2.2</a>
-											</li>
-										</ul>
-									</li>
-								</ul>
-							</li>
-							<li>
-								<a href="#">Ereignis 3</a>
-							</li>
-						</ul>
-					</li>
-				</ul>
-			</li>
-		</ul>
-	</div>
+
+#macro( printTree $currTree )
+<li>
+	<a href="#">$tree.getData().toString()</a>
+	#if(!$currTree.isLeaf())
+	<ul>
+		#foreach( $child in $currTree.getChildren() )
+			#printTree($child)
+		#end
+	</ul>
+	#end
+</li>
+#end
+
+<div class="tree">
+<ul>
+#printTree($tree)
+</ul>
+</div>
+
 </body>
 </html>

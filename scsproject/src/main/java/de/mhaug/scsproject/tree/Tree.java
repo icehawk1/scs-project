@@ -51,13 +51,20 @@ public class Tree<T> {
 			return false;
 	}
 
+	/**
+	 * Returns all nodes in this Tree
+	 */
 	public List<T> traverse() {
 		return traverse((child) -> {
 			return true;
 		});
 	}
 
-	private List<T> traverse(Function<Tree, Boolean> lambda) {
+	/**
+	 * Returns all nodes where lambda returns true. Please note that lambda's
+	 * are a new feature in Java 8, google it if you have never heard of it.
+	 */
+	public List<T> traverse(Function<Tree, Boolean> lambda) {
 		List<T> result = new LinkedList<>();
 		for (Tree<T> found : traverse(new LinkedList<Tree<T>>(), lambda)) {
 			result.add(found.getData());
@@ -65,6 +72,9 @@ public class Tree<T> {
 		return result;
 	}
 
+	/**
+	 * Actually does the traversing
+	 */
 	private List<Tree<T>> traverse(List<Tree<T>> result, Function<Tree, Boolean> lambda) {
 		if (lambda.apply(this)) {
 			result.add(this);
@@ -77,12 +87,18 @@ public class Tree<T> {
 		return result;
 	}
 
+	/**
+	 * Returns all nodes that do not have children
+	 */
 	public List<T> getLeafes() {
 		return traverse((child) -> {
 			return child.isLeaf();
 		});
 	}
 
+	/**
+	 * Returns all nodes which contain the given value
+	 */
 	public List<T> search(T value) {
 		return traverse((child) -> {
 			return child.getData().equals(value);
