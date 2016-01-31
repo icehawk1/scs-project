@@ -6,16 +6,23 @@
 		<link rel="stylesheet" href="/staticfiles/webix/webix.css" type="text/css" charset="utf-8">
 		<script src="/staticfiles/webix/webix.js" type="text/javascript"></script>
 		<script type="application/javascript" charset="utf-8">
+		var pengfunc = function() {alert("value: "+webix.ui.datatable.collectValues("name"));}
+
 		window.onload = function() {
 			 dtable = new webix.ui({
 		        container:"tablecanvas",
 		        view:"datatable",
-		        columns:[
-		            { id:"name", header:"Name",   width:100},
-		            { id:"joiner",  header:"Joiner", width:80},
-		            { id:"children", header:"Children",        width:200},
-					{ id:"comment", header:"Comment",        width:200}
-		        ],
+				columns: [
+					{ id:"name", header:"Name",   width:100, editor:"text"},
+					{ id:"joiner",  header:"Joiner", width:80, editor:"richselect", options:["AND", "OR"]},
+					{ id:"children", header:"Children", width:200, editor:"text"},
+					{ id:"comment", header:"Comment", width:200, editor:"text"}
+				],
+
+				editable:true,
+				autoheight:true,
+				autowidth:true,
+
 				data:[
 				{ name:"Bad stuff", joiner:"AND",children:"Event 1, Event 2, Event 3"},
 
