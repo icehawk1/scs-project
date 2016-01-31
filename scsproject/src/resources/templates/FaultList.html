@@ -14,7 +14,7 @@
 		        view:"datatable",
 				columns: [
 					{ id:"name", header:"Name",   width:100, editor:"text"},
-					{ id:"joiner",  header:"Joiner", width:80, editor:"richselect", options:["AND", "OR"]},
+					{ id:"joiner",  header:"Joiner", width:80, editor:"richselect", options:["None","AND", "OR"]},
 					{ id:"children", header:"Children", width:200, editor:"text"},
 					{ id:"comment", header:"Comment", width:200, editor:"text"}
 				],
@@ -22,6 +22,8 @@
 				editable:true,
 				autoheight:true,
 				autowidth:true,
+				save:"/FaultList",
+				datatype: "json",
 
 				data:[
 				{ name:"Bad stuff", joiner:"AND",children:"Event 1, Event 2, Event 3"},
@@ -35,10 +37,13 @@
 				]
 			});
 		};
+
+
 		</script>
     </head>
 
     <body>
 		<div id="tablecanvas" style='width:900px; height:450px; '></div>
+		<form><input id="submit" type="button" value="Submit" onclick="submitData();" /></form>
 	</body>
 </html>

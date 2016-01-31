@@ -16,6 +16,6 @@ public class GuiceModule extends AbstractModule {
 	@Provides
 	@Singleton
 	public Connection provideDBconnection() throws SQLException {
-		return DriverManager.getConnection("jdbc:sqlite:sample.db");
+		return DriverManager.getConnection("jdbc:sqlite:internal.db");
 	}
 }

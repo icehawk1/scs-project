@@ -2,6 +2,9 @@ package de.mhaug.scsproject;
 
 import java.io.IOException;
 import java.net.URI;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.Properties;
 
 import org.apache.velocity.app.Velocity;
@@ -28,12 +31,14 @@ public class Main {
 	 * 
 	 * @param args
 	 * @throws IOException
+	 * @throws SQLException
 	 */
-	public static void main(String[] args) throws IOException {
+	public static void main(String[] args) throws IOException, SQLException {
 		injector = Guice.createInjector(new GuiceModule());
 		Main main = injector.getInstance(Main.class);
 
 		main.initVelocity();
+		main.initDatabase();
 
 		main.startServer();
 		System.out.println(String.format(
@@ -41,6 +46,17 @@ public class Main {
 				BASE_URI));
 		System.in.read();
 		main.shutdownServer();
+	}
+
+	private void initDatabase() throws SQLException {
+		Connection con = injector.getInstance(Connection.class);
+		Statement stmt = con.createStatement();
+
+		stmt.execute("CREATE TABLE IF NOT EXISTS FaultTree(rowid int NOT NULL PRIMARY KEY, name STRING NOT NULL )");
+		stmt.execute("CREATE TABLE IF NOT EXISTS FaultList(rowid int NOT NULL PRIMARY KEY, treeid int NOT NULL"
+				+ ", name STRING NOT NULL, joiner STRING, children STRING, comment STRING,"
+				+ "FOREIGN KEY(treeid) REFERENCES FaultTree(rowid) )");
+		stmt.execute("CREATE UNIQUE INDEX IF NOT EXISTS flname ON FaultList(name)");
 	}
 
 	private void initVelocity() {
@@ -74,6 +90,13 @@ public class Main {
 
 	private void shutdownServer() {
 		server.shutdownNow();
+		try {
+			Connection con = injector.getInstance(Connection.class);
+			if (con.isClosed())
+				con.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public static Injector getInjector() {
