@@ -2,29 +2,27 @@
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Quick start with Tree</title>
-    <link rel="stylesheet" type="text/css" href="/staticfiles/treetest.css">
+    <title>Fault Tree</title>
+	<link rel="stylesheet" href="/staticfiles/webix/webix.css" type="text/css" charset="utf-8">
+    <script src="/staticfiles/webix/webix.js" type="application/javascript" charset="utf-8" ></script>
+
+<script type="text/javascript" charset="utf-8">
+	window.onload = function(){
+		webix.ready(function(){
+			var orgChart = new webix.ui({
+				container:"treecanvas",
+				view:"organogram",
+				select: true,
+				borderless: true,
+				url: "/FaultTree/json",
+				datatype: "json"
+			});
+		});
+	};
+</script>
+
 </head>
 <body>
-
-#macro( printTree $currTree )
-<li>
-	<a href="#">$tree.getData().toString()</a>
-	#if(!$currTree.isLeaf())
-	<ul>
-		#foreach( $child in $currTree.getChildren() )
-			#printTree($child)
-		#end
-	</ul>
-	#end
-</li>
-#end
-
-<div class="tree">
-<ul>
-#printTree($tree)
-</ul>
-</div>
-
+	<div id="treecanvas" style='width:900px; height:450px; '></div>
 </body>
 </html>

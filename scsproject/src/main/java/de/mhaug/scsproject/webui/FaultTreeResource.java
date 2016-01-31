@@ -10,13 +10,25 @@ import javax.ws.rs.core.MediaType;
 
 import org.apache.velocity.context.Context;
 
-@Path("/faultTree")
-public class TreeDisplayResource extends JerseyResource {
+import com.google.gson.Gson;
+
+@Path("/FaultTree")
+public class FaultTreeResource extends JerseyResource {
 	@GET
 	@Produces(MediaType.TEXT_HTML)
 	public String sendGetHtml() {
+		System.out.println("Fault tree html");
+
 		Context context = VelocityConfigurator.getVelocityContext();
-		context.put("tree", FaultTree.getFaultTreeForID(54321));
 		return mergeVelocityTemplate("FaultTree.html", context);
+	}
+
+	@Path("json")
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	public String sendGetJson() {
+		System.out.println("Fault tree json");
+		Gson gson = new Gson();
+		return gson.toJson(FaultTree.getFaultTreeForID(54321));
 	}
 }
