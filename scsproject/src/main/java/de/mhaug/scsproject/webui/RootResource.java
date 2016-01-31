@@ -1,11 +1,14 @@
 package de.mhaug.scsproject.webui;
 
-import de.mhaug.scsproject.VelocityConfigurator;
+import de.mhaug.scsproject.Main;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+
+import org.apache.velocity.VelocityContext;
+import org.apache.velocity.context.Context;
 
 /**
  * Root resource (exposed at "myresource" path)
@@ -21,7 +24,8 @@ public class RootResource extends JerseyResource {
 	@GET
 	@Produces(MediaType.TEXT_HTML)
 	public String sendGetHtml() {
-		String result = mergeVelocityTemplate("Homepage.html", VelocityConfigurator.getVelocityContext());
+		Context context = Main.getInjector().getInstance(VelocityContext.class);
+		String result = mergeVelocityTemplate("Homepage.html", context);
 		return result;
 	}
 }
