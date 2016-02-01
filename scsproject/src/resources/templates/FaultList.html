@@ -23,18 +23,8 @@
 				autoheight:true,
 				autowidth:true,
 				save:"/FaultList",
-				datatype: "json",
-
-				data:[
-					{ name:"Bad stuff", joiner:"AND",children:"Event 1, Event 2, Event 3"},
-
-					{ name:"Event 1", joiner:"",children:""},
-					{ name:"Event 2", joiner:"OR",children:"Event 2.1, Event 2.2"},
-					{ name:"Event 3", joiner:"",children:""},
-
-					{ name:"Event 2.1", joiner:"",children:""},
-					{ name:"Event 2.2", joiner:"",children:""}
-				]
+				url: "/FaultList/json?treeid=42",
+				datatype: "json"
 			});
 		};
 

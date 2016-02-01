@@ -33,6 +33,6 @@ public class FaultTreeResource extends JerseyResource {
 	public String sendGetJson() throws SQLException, CycleFoundException {
 		System.out.println("Fault tree json");
 		Gson gson = new Gson();
-		return gson.toJson(FaultTree.getFaultTreeForID(54321));
+		return gson.toJson(FaultTree.getFaultTreeForID(42));
 	}
 }

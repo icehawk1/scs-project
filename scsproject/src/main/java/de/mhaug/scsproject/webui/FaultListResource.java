@@ -2,10 +2,13 @@ package de.mhaug.scsproject.webui;
 
 import de.mhaug.scsproject.Main;
 import de.mhaug.scsproject.model.FaultTree;
+import de.mhaug.scsproject.model.FaultTreeJoiner;
+import de.mhaug.scsproject.model.JoinerEdge;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.Iterator;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.FormParam;
@@ -16,8 +19,10 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.context.Context;
+import org.jgrapht.experimental.dag.DirectedAcyclicGraph;
 import org.jgrapht.experimental.dag.DirectedAcyclicGraph.CycleFoundException;
 
 /**
@@ -55,5 +60,34 @@ public class FaultListResource extends JerseyResource {
 		stmt.setString(5, children);
 		stmt.setString(6, comment);
 		stmt.execute();
+	}
+
+	@Path("json")
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	public String sendGetJson(@QueryParam("treeid") String treeid) throws SQLException, CycleFoundException {
+		System.out.println("Fault list json");
+		DirectedAcyclicGraph<String, JoinerEdge> graph = FaultTree.getFaultTreeForID(Integer.parseInt(treeid));
+
+		Iterator<String> it = graph.iterator();
+		String result = "[";
+		while (it.hasNext()) {
+			String vertex = it.next();
+
+			String children = "";
+			for (JoinerEdge edge : graph.outgoingEdgesOf(vertex)) {
+				children += edge.getTarget() + ", ";
+			}
+			children = StringUtils.removeEnd(children.trim(), ",");
+
+			FaultTreeJoiner joiner = graph.edgesOf(vertex).iterator().next().getJoiner();
+			result += "{ \"name\":\"" + vertex + "\", \"joiner\":\"" + joiner + "\", \"children\":\"" + children
+					+ "\"},";
+			result += "\n";
+		}
+
+		System.out.println(result);
+		result = StringUtils.removeEnd(result.trim(), ",") + "]";
+		return result;
 	}
 }

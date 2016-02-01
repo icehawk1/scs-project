@@ -57,14 +57,18 @@ public class FaultTreeTest extends AbstractTest {
 		expected.add("Event 2.1");
 		expected.add("Event 2.2");
 
-		Iterator<String> it = graph.iterator();
 		List<String> actual = new ArrayList<>(graph.vertexSet().size());
-
+		Iterator<String> it = graph.iterator();
 		while (it.hasNext()) {
 			String vertex = it.next();
 			actual.add(vertex);
 		}
 
 		assertEquals(expected, actual);
+	}
+
+	@Test
+	public void deleteMe() {
+
 	}
 }
