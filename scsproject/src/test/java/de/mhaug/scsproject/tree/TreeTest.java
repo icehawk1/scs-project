@@ -2,6 +2,8 @@ package de.mhaug.scsproject.tree;
 
 import static org.junit.Assert.assertEquals;
 
+import de.mhaug.scsproject.AbstractTest;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -9,7 +11,7 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 
-public class TreeTest {
+public class TreeTest extends AbstractTest {
 
 	private Tree<String> instance;
 

@@ -5,7 +5,6 @@ import de.mhaug.scsproject.model.FaultTree;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import javax.ws.rs.Consumes;
@@ -14,24 +13,26 @@ import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.context.Context;
 import org.jgrapht.experimental.dag.DirectedAcyclicGraph.CycleFoundException;
 
+/**
+ * Displays the table where the user edits the fault tree and processes his
+ * edits.
+ * 
+ * @author Martin Haug
+ */
 @Path("/FaultList")
 public class FaultListResource extends JerseyResource {
 	@GET
 	@Produces(MediaType.TEXT_HTML)
-	public String sendGetHtml() throws SQLException, CycleFoundException {
-		Connection con = Main.getInjector().getInstance(Connection.class);
-		PreparedStatement stmt = con.prepareStatement("SELECT name,joiner,children FROM FaultList WHERE treeid = ?");
-		stmt.setInt(1, 42);
-		ResultSet rs = stmt.executeQuery();
-
+	public String sendGetHtml(@QueryParam("treeid") String treeid) throws SQLException, CycleFoundException {
 		Context context = Main.getInjector().getInstance(VelocityContext.class);
-		context.put("faultlist", FaultTree.createFaultTreeFromTable(rs));
+		context.put("faultlist", FaultTree.getFaultTreeForID(Integer.parseInt(treeid)));
 
 		return mergeVelocityTemplate("FaultList.html", context);
 	}

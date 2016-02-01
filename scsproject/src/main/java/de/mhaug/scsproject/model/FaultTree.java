@@ -1,5 +1,9 @@
 package de.mhaug.scsproject.model;
 
+import de.mhaug.scsproject.Main;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
@@ -7,24 +11,40 @@ import org.jgrapht.experimental.dag.DirectedAcyclicGraph;
 import org.jgrapht.experimental.dag.DirectedAcyclicGraph.CycleFoundException;
 import org.jgrapht.graph.DefaultEdge;
 
+/**
+ * Represents a fault tree as displayed in the Web-UI. A fault tree has an
+ * undesired event as its root and this event then has its causes as children.
+ * The causes are joined by either OR (at least one of them are needed) or AND
+ * (all of them are needed.). Causes are events that need to happen for the root
+ * to happen.
+ * 
+ * @author Martin Haug
+ */
 public class FaultTree {
 	/**
-	 * Gets a specific fault tree
+	 * Gets a specific fault tree. Throws an exception when the contents of the
+	 * database are invalid.
 	 * 
-	 * TODO: Derzeit nur ein stub
-	 * 
-	 * @param id
+	 * @param treeid
 	 *            The unique id of the fault tree
 	 */
-	public static FaultTreeEvent getFaultTreeForID(int id) {
-		return null;
+	public static DirectedAcyclicGraph<String, JoinerEdge> getFaultTreeForID(int treeid)
+			throws SQLException, CycleFoundException {
+		Connection con = Main.getInjector().getInstance(Connection.class);
+		PreparedStatement stmt = con.prepareStatement("SELECT name,joiner,children FROM FaultList WHERE treeid = ?");
+		stmt.setInt(1, treeid);
+		ResultSet rs = stmt.executeQuery();
+
+		return createFaultTreeFromTable(rs);
 	}
 
-	public static DirectedAcyclicGraph<String, JoinerEdge> createFaultTreeFromTable(ResultSet rs)
+	/**
+	 * Creates a FaultTree from the table rows given
+	 */
+	static DirectedAcyclicGraph<String, JoinerEdge> createFaultTreeFromTable(ResultSet rs)
 			throws SQLException, CycleFoundException {
 		DirectedAcyclicGraph<String, JoinerEdge> graph = new DirectedAcyclicGraph<>(JoinerEdge.class);
 
-		// SELECT name,joiner,children FROM FaultList WHERE treeid = ?
 		while (rs.next()) {
 			String name = rs.getString("name").trim();
 			String[] children = rs.getString("children").split(",");
@@ -48,15 +68,20 @@ public class FaultTree {
 	}
 }
 
+/**
+ * An Edge in the FaultTree. Can hold a FaultTreeJoiner.
+ * 
+ * @author Martin Haug
+ */
 class JoinerEdge extends DefaultEdge {
 	private static final long serialVersionUID = 4941354549324940119L;
 	public final FaultTreeJoiner joiner;
 	private final String from;
 	private String to;
 
-	public JoinerEdge(String name, String child, FaultTreeJoiner joiner) {
-		this.from = name;
-		this.to = child;
+	public JoinerEdge(String source, String target, FaultTreeJoiner joiner) {
+		this.from = source;
+		this.to = target;
 		this.joiner = joiner;
 	}
 
@@ -80,62 +105,11 @@ class JoinerEdge extends DefaultEdge {
 	}
 }
 
-class FaultTreeEvent {
-
-	private final String comment;
-	private final int rowid;
-	private final String name;
-
-	public FaultTreeEvent(int rowid, String name, String comment) {
-		this.rowid = rowid;
-		this.name = name;
-		this.comment = comment;
-	}
-
-	public String getComment() {
-		return comment;
-	}
-
-	public int getRowid() {
-		return rowid;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	@Override
-	public String toString() {
-		return "FaultTreeEvent [comment=" + comment + ", rowid=" + rowid + ", name=" + name + "]";
-	}
-
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((name == null) ? 0 : name.hashCode());
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		FaultTreeEvent other = (FaultTreeEvent) obj;
-		if (name == null) {
-			if (other.name != null)
-				return false;
-		} else if (!name.equals(other.name))
-			return false;
-		return true;
-	}
-
-}
-
+/**
+ * The boolean logic gates, that combine entries in the FaultTree.
+ * 
+ * @author Martin Haug
+ */
 enum FaultTreeJoiner {
 	NONE, AND, OR;
 }
