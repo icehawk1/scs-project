@@ -23,11 +23,13 @@ public class FaultTreeTest {
 				.prepareStatement("SELECT name,joiner,children,comment FROM FaultList WHERE treeid = 42");
 		ResultSet rs = stmt.executeQuery();
 
-		DirectedAcyclicGraph actual = FaultTree.createFaultTreeFromTable(rs);
+		DirectedAcyclicGraph<String, JoinerEdge> actual = FaultTree.createFaultTreeFromTable(rs);
 
 		assertEquals(5, actual.edgeSet().size());
 		assertEquals(6, actual.vertexSet().size());
 		assertTrue(actual.containsEdge("Event 2", "Event 2.1"));
+		assertEquals(FaultTreeJoiner.AND, actual.getEdge("Bad stuff", "Event 3").getJoiner());
+		assertEquals(FaultTreeJoiner.OR, actual.getEdge("Event 2", "Event 2.2").getJoiner());
 	}
 
 }

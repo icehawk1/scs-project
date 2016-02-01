@@ -3,9 +3,9 @@ package de.mhaug.scsproject.model;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import org.jgrapht.EdgeFactory;
 import org.jgrapht.experimental.dag.DirectedAcyclicGraph;
 import org.jgrapht.experimental.dag.DirectedAcyclicGraph.CycleFoundException;
+import org.jgrapht.graph.DefaultEdge;
 
 public class FaultTree {
 	/**
@@ -22,7 +22,7 @@ public class FaultTree {
 
 	public static DirectedAcyclicGraph<String, JoinerEdge> createFaultTreeFromTable(ResultSet rs)
 			throws SQLException, CycleFoundException {
-		DirectedAcyclicGraph<String, JoinerEdge> graph = new DirectedAcyclicGraph<>(new JoinerEdgeFactory());
+		DirectedAcyclicGraph<String, JoinerEdge> graph = new DirectedAcyclicGraph<>(JoinerEdge.class);
 
 		// SELECT name,joiner,children FROM FaultList WHERE treeid = ?
 		while (rs.next()) {
@@ -40,7 +40,7 @@ public class FaultTree {
 				if (!graph.containsVertex(child)) {
 					graph.addVertex(child);
 				}
-				graph.addDagEdge(name, child);
+				graph.addDagEdge(name, child, new JoinerEdge(name, child, FaultTreeJoiner.valueOf(joiner)));
 			}
 		}
 
@@ -48,24 +48,35 @@ public class FaultTree {
 	}
 }
 
-class JoinerEdgeFactory implements EdgeFactory<String, JoinerEdge> {
+class JoinerEdge extends DefaultEdge {
+	private static final long serialVersionUID = 4941354549324940119L;
+	public final FaultTreeJoiner joiner;
+	private final String from;
+	private String to;
 
-	@Override
-	public JoinerEdge createEdge(String sourceVertex, String targetVertex) {
-		return new JoinerEdge(FaultTreeJoiner.AND);
-	}
-}
-
-class JoinerEdge {
-	FaultTreeJoiner joiner;
-
-	public JoinerEdge(FaultTreeJoiner joiner) {
+	public JoinerEdge(String name, String child, FaultTreeJoiner joiner) {
+		this.from = name;
+		this.to = child;
 		this.joiner = joiner;
 	}
 
 	@Override
 	public boolean equals(Object obj) {
 		return false;
+	}
+
+	@Override
+	protected Object getSource() {
+		return from;
+	}
+
+	@Override
+	protected Object getTarget() {
+		return to;
+	}
+
+	public FaultTreeJoiner getJoiner() {
+		return joiner;
 	}
 }
 

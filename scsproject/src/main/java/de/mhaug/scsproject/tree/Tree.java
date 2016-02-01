@@ -64,7 +64,7 @@ public class Tree<T> {
 	 * Returns all nodes where lambda returns true. Please note that lambda's
 	 * are a new feature in Java 8, google it if you have never heard of it.
 	 */
-	public List<T> traverse(Function<Tree, Boolean> lambda) {
+	public List<T> traverse(Function<Tree<T>, Boolean> lambda) {
 		List<T> result = new LinkedList<>();
 		for (Tree<T> found : traverse(new LinkedList<Tree<T>>(), lambda)) {
 			result.add(found.getData());
@@ -75,7 +75,7 @@ public class Tree<T> {
 	/**
 	 * Actually does the traversing
 	 */
-	private List<Tree<T>> traverse(List<Tree<T>> result, Function<Tree, Boolean> lambda) {
+	private List<Tree<T>> traverse(List<Tree<T>> result, Function<Tree<T>, Boolean> lambda) {
 		if (lambda.apply(this)) {
 			result.add(this);
 		}
@@ -126,7 +126,7 @@ public class Tree<T> {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Tree other = (Tree) obj;
+		Tree<T> other = (Tree<T>) obj;
 		if (data == null) {
 			if (other.data != null)
 				return false;
