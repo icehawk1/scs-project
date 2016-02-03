@@ -22,10 +22,12 @@ import com.google.inject.Inject;
 @Path("/FaultTree")
 public class FaultTreeResource extends JerseyResource {
 	private FaultTree faulttree;
+	private DepthFirstSearch dfs;
 
 	@Inject
-	public FaultTreeResource(FaultTree faulttree) {
+	public FaultTreeResource(FaultTree faulttree, DepthFirstSearch dfs) {
 		this.faulttree = faulttree;
+		this.dfs = dfs;
 	}
 
 	@GET
@@ -43,7 +45,7 @@ public class FaultTreeResource extends JerseyResource {
 	public String sendGetJson(@QueryParam("treeid") String treeid) throws SQLException, CycleFoundException {
 		System.out.println("Fault tree json");
 		DirectedAcyclicGraph<String, JoinerEdge> graph = faulttree.getFaultTreeForID(Integer.parseInt(treeid));
-
-		return "";
+		String result = dfs.dfs(graph);
+		return result;
 	}
 }

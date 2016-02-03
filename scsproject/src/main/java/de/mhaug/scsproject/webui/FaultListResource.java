@@ -56,19 +56,20 @@ public class FaultListResource extends JerseyResource {
 	public void receivePostForm(@FormParam("name") String name, @FormParam("joiner") String joiner,
 			@FormParam("children") String children, @FormParam("id") String id, @FormParam("comment") String comment,
 			@FormParam("webix_operation") String op) throws SQLException {
-		System.out.println("FaultList Received: " + name + " " + joiner + " " + children + " " + id + " " + op);
+
+		System.out.println("FaultList save: " + op + ", " + id);
 
 		Connection con = Main.getInjector().getInstance(Connection.class);
-		PreparedStatement stmt = con
-				.prepareStatement("insert or replace into FaultList(rowid, treeid, name, joiner, children, comment) "
-						+ "values (?, ?, ?, ?, ?, ?)");
-		stmt.setLong(1, Long.parseLong(id));
-		stmt.setLong(2, 42);
-		stmt.setString(3, name);
-		stmt.setString(4, joiner);
-		stmt.setString(5, children);
-		stmt.setString(6, comment);
-		stmt.execute();
+		if (op.equals("update")) {
+			PreparedStatement stmt = con
+					.prepareStatement("UPDATE FaultList SET name=?, joiner=?, children=?, comment=? WHERE rowid=?");
+			stmt.setString(1, name);
+			stmt.setString(2, joiner);
+			stmt.setString(3, children);
+			stmt.setString(4, comment);
+			stmt.setLong(5, Long.parseLong(id));
+			stmt.execute();
+		}
 	}
 
 	@Path("json")
@@ -95,7 +96,6 @@ public class FaultListResource extends JerseyResource {
 			result += "\n";
 		}
 
-		System.out.println(result);
 		result = StringUtils.removeEnd(result.trim(), ",") + "]";
 		return result;
 	}

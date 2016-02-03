@@ -22,7 +22,7 @@ public class DepthFirstSearch {
 		TreeEntry root = new TreeEntry(graph.iterator().next());
 		dfsInternal(graph, root);
 		String result = new Gson().toJson(root);
-		return result;
+		return "[" + result + "]";
 	}
 
 	private void dfsInternal(DirectedAcyclicGraph<String, JoinerEdge> graph, TreeEntry currentRoot) {
@@ -35,19 +35,18 @@ public class DepthFirstSearch {
 			}
 		}
 	}
-
 }
 
 class TreeEntry {
 	@SerializedName("id")
-	public final int id;
+	public final String id;
 	@SerializedName("value")
 	public final String vertex;
 	@SerializedName("data")
 	public final List<TreeEntry> children;
 
 	public TreeEntry(String vertex) {
-		this.id = new Random().nextInt();
+		this.id = "" + Math.abs(new Random().nextInt());
 		this.vertex = vertex;
 		this.children = new ArrayList<>();
 	}
@@ -61,7 +60,7 @@ class TreeEntry {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + id;
+		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		result = prime * result + ((vertex == null) ? 0 : vertex.hashCode());
 		return result;
 	}
@@ -75,7 +74,10 @@ class TreeEntry {
 		if (getClass() != obj.getClass())
 			return false;
 		TreeEntry other = (TreeEntry) obj;
-		if (id != other.id)
+		if (id == null) {
+			if (other.id != null)
+				return false;
+		} else if (!id.equals(other.id))
 			return false;
 		if (vertex == null) {
 			if (other.vertex != null)

@@ -1,5 +1,9 @@
 package de.mhaug.scsproject;
 
+import de.mhaug.scsproject.webui.FaultListResource;
+import de.mhaug.scsproject.webui.FaultTreeResource;
+import de.mhaug.scsproject.webui.RootResource;
+
 import java.io.IOException;
 import java.net.URI;
 import java.sql.Connection;
@@ -77,6 +81,9 @@ public class Main {
 		// providers
 		// in de.mhaug.scsproject package
 		final ResourceConfig rc = new ResourceConfig().packages("de.mhaug.scsproject.webui");
+		rc.register(getInjector().getInstance(FaultTreeResource.class));
+		rc.register(getInjector().getInstance(FaultListResource.class));
+		rc.register(getInjector().getInstance(RootResource.class));
 
 		// create and start a new instance of grizzly http server
 		// exposing the Jersey application at BASE_URI
@@ -85,7 +92,6 @@ public class Main {
 		// Add handler which serves static files
 		server.getServerConfiguration().addHttpHandler(new StaticHttpHandler("src/resources/staticfiles"),
 				"/staticfiles");
-
 	}
 
 	private void shutdownServer() {

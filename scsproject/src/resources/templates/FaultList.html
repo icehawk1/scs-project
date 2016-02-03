@@ -7,29 +7,29 @@
 		<script src="/staticfiles/webix/webix.js" type="text/javascript"></script>
 		<script type="application/javascript" charset="utf-8">
 		window.onload = function() {
-			 dtable = new webix.ui({
-		        container:"tablecanvas",
-		        view:"datatable",
-				columns: [
-					{ id:"name", header:"Name",   width:100, editor:"text"},
-					{ id:"joiner",  header:"Joiner", width:80, editor:"richselect", options:["None","AND", "OR"]},
-					{ id:"children", header:"Children", width:200, editor:"text"},
-					{ id:"comment", header:"Comment", width:200, editor:"text"}
-				],
+			webix.ready(function(){
+				var dtable = new webix.ui({
+			        container:"bodycanvas",
+			        view:"datatable",
+					columns: [
+						{ id:"name", header:"Name",   width:100, editor:"text"},
+						{ id:"joiner",  header:"Joiner", width:80, editor:"richselect", options:["None","AND", "OR"]},
+						{ id:"children", header:"Children", width:200, editor:"text"},
+						{ id:"comment", header:"Comment", width:200, editor:"text"}
+					],
 
-				editable:true,
-				autoheight:true,
-				autowidth:true,
-				save:"/FaultList",
-				url: "/FaultList/json?treeid=42",
-				datatype: "json"
+					editable:true,
+					autoheight:true,
+					autowidth:true,
+					save:"/FaultList?treeid=42",
+					url: "/FaultList/json?treeid=42",
+					datatype: "json"
+				});
 			});
 		};
 		</script>
     </head>
 
-    <body>
-		<div id="tablecanvas" style='width:900px; height:450px; '></div>
-		<form><input id="submit" type="button" value="Submit" onclick="submitData();" /></form>
+    <body id="bodycanvas">
 	</body>
 </html>

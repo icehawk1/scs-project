@@ -1,35 +1,38 @@
 <!DOCTYPE HTML>
 <html>
     <head>
-    <link rel="stylesheet" href="http://cdn.webix.com/edge/webix.css" type="text/css">
-    <script src="http://cdn.webix.com/edge/webix.js" type="text/javascript"></script>
-    </head>
-    <body>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<title>Homepage</title>
+		<link rel="stylesheet" href="/staticfiles/webix/webix.css" type="text/css" charset="utf-8">
+		<script src="/staticfiles/webix/webix.js" type="application/javascript" charset="utf-8" ></script>
+
 		<!-- Fault Tree -->
 		<script type="text/javascript" charset="utf-8">
-			window.onload = function(){
-				webix.ready(function(){
-					var orgChart = new webix.ui({
-						container:"treecanvas",
-						view:"organogram",
-						select: false,
-						borderless: true,
-						url: "/FaultTree/json?treeid=42",
-						datatype: "json"
-					});
+			var faultTree;
+			webix.ready(function(){
+				faultTree = new webix.ui({
+					container:"treecanvas",
+					view:"organogram",
+					select: false,
+					borderless: true,
+					url: "/FaultTree/json?treeid=42",
+					datatype: "json"
 				});
-			};
-		</script>
+			});
 
-		<!-- Fault List -->
-		<script type="application/javascript" charset="utf-8">
-			window.onload = function() {
-				 dtable = new webix.ui({
+			//Keep fault tree up to date
+			window.setInterval(function(){ faultTree.clearAll(); faultTree.load("/FaultTree/json?treeid=42"); }, 5000);
+
+			// Fault list
+			var faultList;
+			webix.ready(function(){
+				faultList = new webix.ui({
 					container:"tablecanvas",
 					view:"datatable",
 					columns: [
-						{ id:"name", header:"Name",   width:100, editor:"text"},
-						{ id:"joiner",  header:"Joiner", width:80, editor:"richselect", options:["None","AND", "OR"]},
+						{ id:"rowid", header:"id", width:30},
+						{ id:"name", header:"Name", width:100, editor:"text"},
+						{ id:"joiner", header:"Joiner", width:80, editor:"richselect", options:["None","AND", "OR"]},
 						{ id:"children", header:"Children", width:200, editor:"text"},
 						{ id:"comment", header:"Comment", width:200, editor:"text"}
 					],
@@ -41,11 +44,18 @@
 					url: "/FaultList/json?treeid=42",
 					datatype: "json"
 				});
-			};
+			});
 		</script>
+    </head>
+    <body>
 
-		<p><div id="treecanvas" style='width:900px; height:450px; '></div>
-		<p><div id="tablecanvas" style='width:900px; height:450px; '></div>
-		<form><input id="submit" type="button" value="Submit" onclick="submitData();" /></form>
+		<p><div id="treecanvas" style='width:900px; height:350px; '></div>
+		<p><div id="tablecanvas" style='width:900px; height:350px; '></div>
+
+		<form>
+			<button id="addLine">Add entry</button>
+			<button id="RemoveLine">Remove selected entry</button>
+			<input id="submit" type="submit" value="Submit" onclick="submitData();" />
+		</form>
     </body>
 </html>

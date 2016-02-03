@@ -10,11 +10,11 @@
 	window.onload = function(){
 		webix.ready(function(){
 			var orgChart = new webix.ui({
-				container:"treecanvas",
+				container:"bodycanvas",
 				view:"organogram",
-				select: true,
+				select: false,
 				borderless: true,
-				url: "/FaultTree/json",
+				url: "/FaultTree/json?treeid=42",
 				datatype: "json"
 			});
 		});
@@ -22,7 +22,6 @@
 </script>
 
 </head>
-<body>
-	<div id="treecanvas" style='width:900px; height:450px; '></div>
+<body id="bodycanvas">
 </body>
 </html>
