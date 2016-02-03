@@ -25,6 +25,8 @@ import org.apache.velocity.context.Context;
 import org.jgrapht.experimental.dag.DirectedAcyclicGraph;
 import org.jgrapht.experimental.dag.DirectedAcyclicGraph.CycleFoundException;
 
+import com.google.inject.Inject;
+
 /**
  * Displays the table where the user edits the fault tree and processes his
  * edits.
@@ -33,11 +35,18 @@ import org.jgrapht.experimental.dag.DirectedAcyclicGraph.CycleFoundException;
  */
 @Path("/FaultList")
 public class FaultListResource extends JerseyResource {
+	private FaultTree faulttree;
+
+	@Inject
+	public FaultListResource(FaultTree faulttree) {
+		this.faulttree = faulttree;
+	}
+
 	@GET
 	@Produces(MediaType.TEXT_HTML)
 	public String sendGetHtml(@QueryParam("treeid") String treeid) throws SQLException, CycleFoundException {
 		Context context = Main.getInjector().getInstance(VelocityContext.class);
-		context.put("faultlist", FaultTree.getFaultTreeForID(Integer.parseInt(treeid)));
+		context.put("faultlist", faulttree.getFaultTreeForID(Integer.parseInt(treeid)));
 
 		return mergeVelocityTemplate("FaultList.html", context);
 	}
@@ -67,7 +76,7 @@ public class FaultListResource extends JerseyResource {
 	@Produces(MediaType.APPLICATION_JSON)
 	public String sendGetJson(@QueryParam("treeid") String treeid) throws SQLException, CycleFoundException {
 		System.out.println("Fault list json");
-		DirectedAcyclicGraph<String, JoinerEdge> graph = FaultTree.getFaultTreeForID(Integer.parseInt(treeid));
+		DirectedAcyclicGraph<String, JoinerEdge> graph = faulttree.getFaultTreeForID(Integer.parseInt(treeid));
 
 		Iterator<String> it = graph.iterator();
 		String result = "[";

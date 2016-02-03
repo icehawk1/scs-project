@@ -5,21 +5,47 @@
     <script src="http://cdn.webix.com/edge/webix.js" type="text/javascript"></script>
     </head>
     <body>
-        <script type="text/javascript" charset="utf-8">
+		<!-- Fault Tree -->
+		<script type="text/javascript" charset="utf-8">
+			window.onload = function(){
+				webix.ready(function(){
+					var orgChart = new webix.ui({
+						container:"treecanvas",
+						view:"organogram",
+						select: false,
+						borderless: true,
+						url: "/FaultTree/json?treeid=42",
+						datatype: "json"
+					});
+				});
+			};
+		</script>
 
-webix.ui({
-  rows:[
-      { view:"template",
-        type:"header", template:"My App!" },
-      { view:"datatable",
-        autoConfig:true,
-        data:{
-          title:"My Fair Lady", year:1964, votes:533848, rating:8.9, rank:5
-        }
-      }
-  ]
-});
+		<!-- Fault List -->
+		<script type="application/javascript" charset="utf-8">
+			window.onload = function() {
+				 dtable = new webix.ui({
+					container:"tablecanvas",
+					view:"datatable",
+					columns: [
+						{ id:"name", header:"Name",   width:100, editor:"text"},
+						{ id:"joiner",  header:"Joiner", width:80, editor:"richselect", options:["None","AND", "OR"]},
+						{ id:"children", header:"Children", width:200, editor:"text"},
+						{ id:"comment", header:"Comment", width:200, editor:"text"}
+					],
 
-        </script>
+					editable:true,
+					autoheight:true,
+					autowidth:true,
+					save:"/FaultList",
+					url: "/FaultList/json?treeid=42",
+					datatype: "json"
+				});
+			};
+		</script>
+
+		<p><div id="treecanvas" style='width:900px; height:450px; '></div>
+		<p><div id="tablecanvas" style='width:900px; height:450px; '></div>
+		<form><input id="submit" type="button" value="Submit" onclick="submitData();" /></form>
     </body>
 </html>

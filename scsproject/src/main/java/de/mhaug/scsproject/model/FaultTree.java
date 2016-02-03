@@ -1,7 +1,5 @@
 package de.mhaug.scsproject.model;
 
-import de.mhaug.scsproject.Main;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -9,6 +7,8 @@ import java.sql.SQLException;
 
 import org.jgrapht.experimental.dag.DirectedAcyclicGraph;
 import org.jgrapht.experimental.dag.DirectedAcyclicGraph.CycleFoundException;
+
+import com.google.inject.Inject;
 
 /**
  * Represents a fault tree as displayed in the Web-UI. A fault tree has an
@@ -20,6 +20,14 @@ import org.jgrapht.experimental.dag.DirectedAcyclicGraph.CycleFoundException;
  * @author Martin Haug
  */
 public class FaultTree {
+
+	private Connection con;
+
+	@Inject
+	public FaultTree(Connection con) {
+		this.con = con;
+	}
+
 	/**
 	 * Gets a specific fault tree. Throws an exception when the contents of the
 	 * database are invalid.
@@ -27,9 +35,8 @@ public class FaultTree {
 	 * @param treeid
 	 *            The unique id of the fault tree
 	 */
-	public static DirectedAcyclicGraph<String, JoinerEdge> getFaultTreeForID(int treeid)
+	public DirectedAcyclicGraph<String, JoinerEdge> getFaultTreeForID(int treeid)
 			throws SQLException, CycleFoundException {
-		Connection con = Main.getInjector().getInstance(Connection.class);
 		PreparedStatement stmt = con.prepareStatement("SELECT name,joiner,children FROM FaultList WHERE treeid = ?");
 		stmt.setInt(1, treeid);
 		ResultSet rs = stmt.executeQuery();
@@ -40,7 +47,7 @@ public class FaultTree {
 	/**
 	 * Creates a FaultTree from the table rows given
 	 */
-	static DirectedAcyclicGraph<String, JoinerEdge> createFaultTreeFromTable(ResultSet rs)
+	DirectedAcyclicGraph<String, JoinerEdge> createFaultTreeFromTable(ResultSet rs)
 			throws SQLException, CycleFoundException {
 		DirectedAcyclicGraph<String, JoinerEdge> graph = new DirectedAcyclicGraph<>(JoinerEdge.class);
 

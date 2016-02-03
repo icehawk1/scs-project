@@ -20,6 +20,7 @@ import org.junit.Test;
 
 public class FaultTreeTest extends AbstractTest {
 	private DirectedAcyclicGraph<String, JoinerEdge> graph;
+	private Object faulttree;
 
 	@Before
 	public void setUp() throws SQLException, CycleFoundException {
@@ -28,7 +29,7 @@ public class FaultTreeTest extends AbstractTest {
 				.prepareStatement("SELECT name,joiner,children,comment FROM FaultList WHERE treeid = 42");
 		ResultSet rs = stmt.executeQuery();
 
-		graph = FaultTree.createFaultTreeFromTable(rs);
+		graph = getInjector().getInstance(FaultTree.class).createFaultTreeFromTable(rs);
 	}
 
 	/**
