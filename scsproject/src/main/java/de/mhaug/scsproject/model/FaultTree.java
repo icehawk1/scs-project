@@ -50,24 +50,38 @@ public class FaultTree {
 	DirectedAcyclicGraph<String, JoinerEdge> createFaultTreeFromTable(ResultSet rs)
 			throws SQLException, CycleFoundException {
 		DirectedAcyclicGraph<String, JoinerEdge> graph = new DirectedAcyclicGraph<>(JoinerEdge.class);
+		try {
+			while (rs.next()) {
+				String name = rs.getString("name");
+				if (name == null)
+					name = "";
+				name = name.trim();
 
-		while (rs.next()) {
-			String name = rs.getString("name").trim();
-			String[] children = rs.getString("children").split(",");
-			String joiner = rs.getString("joiner").trim().toUpperCase();
+				String temp = rs.getString("children");
+				if (temp == null)
+					temp = "";
+				String[] children = temp.split(",");
 
-			graph.addVertex(name);
-			for (String child : children) {
-				child = child.trim();
-				if (child.isEmpty()) {
-					continue;
+				String joiner = rs.getString("joiner");
+				if (joiner == null)
+					joiner = "";
+				joiner = joiner.trim().toUpperCase();
+
+				graph.addVertex(name);
+				for (String child : children) {
+					child = child.trim();
+					if (child.isEmpty()) {
+						continue;
+					}
+
+					if (!graph.containsVertex(child)) {
+						graph.addVertex(child);
+					}
+					graph.addDagEdge(name, child, new JoinerEdge(name, child, FaultTreeJoiner.valueOf(joiner)));
 				}
-
-				if (!graph.containsVertex(child)) {
-					graph.addVertex(child);
-				}
-				graph.addDagEdge(name, child, new JoinerEdge(name, child, FaultTreeJoiner.valueOf(joiner)));
 			}
+		} catch (Exception ex) {
+			ex.printStackTrace();
 		}
 
 		return graph;

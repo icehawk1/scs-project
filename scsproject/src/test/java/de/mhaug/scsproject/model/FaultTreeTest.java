@@ -67,9 +67,4 @@ public class FaultTreeTest extends AbstractTest {
 
 		assertEquals(expected, actual);
 	}
-
-	@Test
-	public void deleteMe() {
-
-	}
 }

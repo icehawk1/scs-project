@@ -7,6 +7,7 @@ import de.mhaug.scsproject.model.JoinerEdge;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Iterator;
 
@@ -36,10 +37,12 @@ import com.google.inject.Inject;
 @Path("/FaultList")
 public class FaultListResource extends JerseyResource {
 	private FaultTree faulttree;
+	private Connection con;
 
 	@Inject
-	public FaultListResource(FaultTree faulttree) {
+	public FaultListResource(FaultTree faulttree, Connection con) {
 		this.faulttree = faulttree;
+		this.con = con;
 	}
 
 	@GET
@@ -83,6 +86,7 @@ public class FaultListResource extends JerseyResource {
 		String result = "[";
 		while (it.hasNext()) {
 			String vertex = it.next();
+			int rowid = getRowidForName(vertex);
 
 			String children = "";
 			for (JoinerEdge edge : graph.outgoingEdgesOf(vertex)) {
@@ -91,12 +95,26 @@ public class FaultListResource extends JerseyResource {
 			children = StringUtils.removeEnd(children.trim(), ",");
 
 			FaultTreeJoiner joiner = graph.edgesOf(vertex).iterator().next().getJoiner();
-			result += "{ \"name\":\"" + vertex + "\", \"joiner\":\"" + joiner + "\", \"children\":\"" + children
-					+ "\"},";
+			result += "{\"rowid\":\"" + rowid + "\", \"name\":\"" + vertex + "\", \"joiner\":\"" + joiner
+					+ "\", \"children\":\"" + children + "\"},";
 			result += "\n";
 		}
 
 		result = StringUtils.removeEnd(result.trim(), ",") + "]";
 		return result;
+	}
+
+	private int getRowidForName(String name) {
+		PreparedStatement stmt;
+		try {
+			stmt = con.prepareStatement("SELECT rowid FROM FaultList WHERE name=?");
+			stmt.setString(1, name);
+			ResultSet rs = stmt.executeQuery();
+			int result = rs.getInt("rowid");
+			return result;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return -1;
+		}
 	}
 }
