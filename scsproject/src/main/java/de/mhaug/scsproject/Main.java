@@ -3,6 +3,7 @@ package de.mhaug.scsproject;
 import de.mhaug.scsproject.webui.FaultListResource;
 import de.mhaug.scsproject.webui.FaultTreeResource;
 import de.mhaug.scsproject.webui.RootResource;
+import de.mhaug.scsproject.webui.TreeEditorResource;
 
 import java.io.IOException;
 import java.net.URI;
@@ -56,8 +57,8 @@ public class Main {
 		Connection con = injector.getInstance(Connection.class);
 		Statement stmt = con.createStatement();
 
-		stmt.execute("CREATE TABLE IF NOT EXISTS FaultTree(rowid int NOT NULL PRIMARY KEY, name STRING NOT NULL )");
-		stmt.execute("CREATE TABLE IF NOT EXISTS FaultList(rowid int NOT NULL PRIMARY KEY, treeid int NOT NULL"
+		stmt.execute("CREATE TABLE IF NOT EXISTS FaultTree(name STRING NOT NULL )");
+		stmt.execute("CREATE TABLE IF NOT EXISTS FaultList(treeid int NOT NULL"
 				+ ", name STRING NOT NULL, joiner STRING, children STRING, comment STRING,"
 				+ "FOREIGN KEY(treeid) REFERENCES FaultTree(rowid) )");
 		stmt.execute("CREATE UNIQUE INDEX IF NOT EXISTS flname ON FaultList(name)");
@@ -84,6 +85,7 @@ public class Main {
 		rc.register(getInjector().getInstance(FaultTreeResource.class));
 		rc.register(getInjector().getInstance(FaultListResource.class));
 		rc.register(getInjector().getInstance(RootResource.class));
+		rc.register(getInjector().getInstance(TreeEditorResource.class));
 
 		// create and start a new instance of grizzly http server
 		// exposing the Jersey application at BASE_URI
