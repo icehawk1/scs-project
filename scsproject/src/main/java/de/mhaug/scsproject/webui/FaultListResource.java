@@ -21,8 +21,6 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.velocity.VelocityContext;
-import org.apache.velocity.context.Context;
 import org.jgrapht.experimental.dag.DirectedAcyclicGraph;
 import org.jgrapht.experimental.dag.DirectedAcyclicGraph.CycleFoundException;
 
@@ -45,20 +43,11 @@ public class FaultListResource extends JerseyResource {
 		this.con = con;
 	}
 
-	@GET
-	@Produces(MediaType.TEXT_HTML)
-	public String sendGetHtml(@QueryParam("treeid") String treeid) throws SQLException, CycleFoundException {
-		Context context = Main.getInjector().getInstance(VelocityContext.class);
-		context.put("faultlist", faulttree.getFaultTreeForID(Integer.parseInt(treeid)));
-
-		return mergeVelocityTemplate("FaultList.html", context);
-	}
-
 	@POST
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-	public void receivePostForm(@FormParam("name") String name, @FormParam("joiner") String joiner,
-			@FormParam("children") String children, @FormParam("id") String id, @FormParam("comment") String comment,
-			@FormParam("webix_operation") String op) throws SQLException {
+	public void receivePostForm(@QueryParam("treeid") String treeid, @FormParam("name") String name,
+			@FormParam("joiner") String joiner, @FormParam("children") String children, @FormParam("id") String id,
+			@FormParam("comment") String comment, @FormParam("webix_operation") String op) throws SQLException {
 
 		System.out.println("FaultList save: " + op + ", " + id);
 
@@ -75,29 +64,51 @@ public class FaultListResource extends JerseyResource {
 		}
 	}
 
+	@Path("AddRow")
+	@POST
+	public String acceptPostAddRow(@QueryParam("treeid") String treeid) throws SQLException {
+		System.out.println("add row: " + treeid);
+		try {
+			PreparedStatement stmt = con.prepareStatement("INSERT INTO FaultList (treeid,name) VALUES (?,?)");
+			stmt.setString(1, treeid);
+			stmt.setString(2, "");
+			stmt.execute();
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+		return "row added";
+	}
+
 	@Path("json")
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	public String sendGetJson(@QueryParam("treeid") String treeid) throws SQLException, CycleFoundException {
-		System.out.println("Fault list json");
 		DirectedAcyclicGraph<String, JoinerEdge> graph = faulttree.getFaultTreeForID(Integer.parseInt(treeid));
 
-		Iterator<String> it = graph.iterator();
 		String result = "[";
-		while (it.hasNext()) {
-			String vertex = it.next();
-			int rowid = getRowidForName(vertex);
+		try {
+			Iterator<String> it = graph.iterator();
+			while (it.hasNext()) {
+				String vertex = it.next();
+				int rowid = getRowidForName(vertex);
 
-			String children = "";
-			for (JoinerEdge edge : graph.outgoingEdgesOf(vertex)) {
-				children += edge.getTarget() + ", ";
+				String children = "";
+				for (JoinerEdge edge : graph.outgoingEdgesOf(vertex)) {
+					children += edge.getTarget() + ", ";
+				}
+				children = StringUtils.removeEnd(children.trim(), ",");
+
+				result += "{\"rowid\":\"" + rowid + "\", \"name\":\"" + vertex + "\", ";
+				Iterator<JoinerEdge> edges = graph.edgesOf(vertex).iterator();
+				if (edges.hasNext()) {
+					FaultTreeJoiner joiner = edges.next().getJoiner();
+					result += "\"joiner\":\"" + joiner + "\", ";
+				}
+				result += "\"children\":\"" + children + "\"},";
+				result += "\n";
 			}
-			children = StringUtils.removeEnd(children.trim(), ",");
-
-			FaultTreeJoiner joiner = graph.edgesOf(vertex).iterator().next().getJoiner();
-			result += "{\"rowid\":\"" + rowid + "\", \"name\":\"" + vertex + "\", \"joiner\":\"" + joiner
-					+ "\", \"children\":\"" + children + "\"},";
-			result += "\n";
+		} catch (Exception ex) {
+			ex.printStackTrace();
 		}
 
 		result = StringUtils.removeEnd(result.trim(), ",") + "]";

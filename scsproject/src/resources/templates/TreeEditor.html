@@ -15,13 +15,18 @@
 					view:"organogram",
 					select: false,
 					borderless: true,
-					url: "/FaultTree/json?treeid=42",
+					url: "/FaultTree/json?treeid=${treeid}",
 					datatype: "json"
 				});
 			});
 
 			//Keep fault tree up to date
-			window.setInterval(function(){ faultTree.clearAll(); faultTree.load("/FaultTree/json?treeid=42"); }, 5000);
+			window.setInterval(function(){
+				faultTree.clearAll();
+				faultTree.load("/FaultTree/json?treeid=${treeid}");
+				faultList.clearAll();
+				faultList.load("/FaultList/json?treeid=${treeid}");
+			}, 5000);
 
 			// Fault list
 			var faultList;
@@ -40,22 +45,43 @@
 					editable:true,
 					autoheight:true,
 					autowidth:true,
-					save:"/FaultList",
-					url: "/FaultList/json?treeid=42",
+					save:"/FaultList?treeid=${treeid}",
+					url: "/FaultList/json?treeid=${treeid}",
 					datatype: "json"
 				});
 			});
+
 		</script>
     </head>
     <body>
-
+		<script>
+	addRowFunc = function() {
+		var xmlHttp = null;
+		try {
+		    xmlHttp = new XMLHttpRequest();
+			if (xmlHttp) {
+				// xmlHttp.open('GET', 'http://localhost:8080/TreeEditor?treeid=42', false);
+			    // xmlHttp.open('GET', 'file:///tmp/blub.html', false);
+				xmlHttp.open('POST', '/FaultList/AddRow?treeid=42', false);
+			    xmlHttp.onreadystatechange = function () {
+			        if (xmlHttp.readyState == 4) {
+			            alert(xmlHttp.responseText);
+			        }
+			    };
+			    xmlHttp.send();
+			}
+		} catch(e) {
+			alert('exception: '+e);
+		}
+	}
+		</script>
 		<p><div id="treecanvas" style='width:900px; height:350px; '></div>
 		<p><div id="tablecanvas" style='width:900px; height:350px; '></div>
 
-		<form>
-			<button id="addLine">Add entry</button>
+		<form >
+			<input type="hidden" name="treeid" value="${treeid}" />
+			<button id="addRow" onclick="addRowFunc()">Add entry</button>
 			<button id="RemoveLine">Remove selected entry</button>
-			<input id="submit" type="submit" value="Submit" onclick="submitData();" />
 		</form>
     </body>
 </html>

@@ -23,7 +23,6 @@ import com.google.inject.Injector;
 
 /**
  * Main class.
- *
  */
 public class Main {
 	// Base URI the Grizzly HTTP server will listen on
@@ -61,7 +60,7 @@ public class Main {
 		stmt.execute("CREATE TABLE IF NOT EXISTS FaultList(treeid int NOT NULL"
 				+ ", name STRING NOT NULL, joiner STRING, children STRING, comment STRING,"
 				+ "FOREIGN KEY(treeid) REFERENCES FaultTree(rowid) )");
-		stmt.execute("CREATE UNIQUE INDEX IF NOT EXISTS flname ON FaultList(name)");
+		stmt.execute("CREATE INDEX  flname ON FaultList(name)");
 	}
 
 	private void initVelocity() {

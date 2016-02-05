@@ -7,6 +7,7 @@ import de.mhaug.scsproject.model.FaultTree;
 
 import java.sql.SQLException;
 
+import org.apache.commons.lang.StringUtils;
 import org.jgrapht.experimental.dag.DirectedAcyclicGraph.CycleFoundException;
 import org.junit.Before;
 import org.junit.Test;
@@ -26,7 +27,11 @@ public class DepthFirstSearchTest extends AbstractTest {
 
 	@Test
 	public void test() throws SQLException, CycleFoundException {
-		TreeEntry actual = new Gson().fromJson(instance.dfs(faulttree.getFaultTreeForID(42)), TreeEntry.class);
+		String jsonActual = instance.dfs(faulttree.getFaultTreeForID(42));
+		jsonActual = StringUtils.removeStart(jsonActual, "[");
+		jsonActual = StringUtils.removeEnd(jsonActual, "]");
+
+		TreeEntry actual = new Gson().fromJson(jsonActual, TreeEntry.class);
 		assertEquals(3, actual.children.size());
 		assertEquals("Event 2.1", actual.children.get(1).children.get(0).vertex);
 	}
