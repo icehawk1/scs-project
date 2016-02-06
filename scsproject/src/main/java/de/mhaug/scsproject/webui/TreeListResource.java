@@ -9,10 +9,8 @@ import java.util.ArrayList;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
-import org.apache.velocity.VelocityContext;
 import org.jgrapht.experimental.dag.DirectedAcyclicGraph.CycleFoundException;
 
 import com.google.gson.Gson;
@@ -25,8 +23,7 @@ public class TreeListResource extends VelocityResource {
 	private final Gson gson;
 
 	@Inject
-	public TreeListResource(VelocityContext context, Connection con, Gson gson) {
-		super(context);
+	public TreeListResource(Connection con, Gson gson) {
 		this.con = con;
 		this.gson = gson;
 	}
@@ -39,13 +36,11 @@ public class TreeListResource extends VelocityResource {
 	 */
 	@GET
 	@Produces(MediaType.TEXT_HTML)
-	public String sendGetHtml(@QueryParam("treeid") String treeid) {
-		context.put("treeid", treeid);
+	public String sendGetHtml() {
 		String result = mergeVelocityTemplate("TreeList.html", context);
 		return result;
 	}
 
-	// @Path("/Treelist/json")
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	public String sendGetJson() throws SQLException, CycleFoundException {

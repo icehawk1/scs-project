@@ -9,10 +9,7 @@ import java.io.IOException;
 import java.net.URI;
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.Properties;
 
-import org.apache.velocity.app.Velocity;
 import org.glassfish.grizzly.http.server.HttpServer;
 import org.glassfish.grizzly.http.server.StaticHttpHandler;
 import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpServerFactory;
@@ -41,33 +38,12 @@ public class Main {
 		injector = Guice.createInjector(new ProductionModule());
 		Main main = injector.getInstance(Main.class);
 
-		main.initVelocity();
-		main.initDatabase();
-
 		main.startServer();
 		System.out.println(String.format(
 				"Jersey app started with WADL available at " + "%sapplication.wadl\nHit enter to stop it...",
 				BASE_URI));
 		System.in.read();
 		main.shutdownServer();
-	}
-
-	private void initDatabase() throws SQLException {
-		Connection con = injector.getInstance(Connection.class);
-		Statement stmt = con.createStatement();
-
-		stmt.execute("CREATE TABLE IF NOT EXISTS FaultTree(name STRING NOT NULL )");
-		stmt.execute("CREATE TABLE IF NOT EXISTS FaultList(treeid int NOT NULL"
-				+ ", name STRING NOT NULL, joiner STRING, children STRING, comment STRING,"
-				+ "FOREIGN KEY(treeid) REFERENCES FaultTree(rowid) )");
-		stmt.execute("CREATE INDEX IF NOT EXISTS flname ON FaultList(name)");
-	}
-
-	private void initVelocity() {
-		Properties props = new Properties();
-		props.setProperty("file.resource.loader.path", "src/resources/templates");
-		props.setProperty("file.resource.loader.modificationCheckInterval", "10");
-		Velocity.init(props);
 	}
 
 	/**

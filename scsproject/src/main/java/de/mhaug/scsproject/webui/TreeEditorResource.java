@@ -6,20 +6,11 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
-import org.apache.velocity.VelocityContext;
-
-import com.google.inject.Inject;
-
 /**
  * Root resource (exposed at "myresource" path)
  */
 @Path("/TreeEditor")
 public class TreeEditorResource extends VelocityResource {
-	@Inject
-	public TreeEditorResource(VelocityContext context) {
-		super(context);
-	}
-
 	/**
 	 * Method handling HTTP GET requests. The returned object will be sent to
 	 * the client as "text/plain" media type.

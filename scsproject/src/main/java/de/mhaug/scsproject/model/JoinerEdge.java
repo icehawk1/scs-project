@@ -37,4 +37,5 @@ public class JoinerEdge extends DefaultEdge {
 	public FaultTreeJoiner getJoiner() {
 		return joiner;
 	}
+
 }

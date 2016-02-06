@@ -8,7 +8,9 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.FormParam;
@@ -23,6 +25,7 @@ import org.apache.commons.lang.StringUtils;
 import org.jgrapht.experimental.dag.DirectedAcyclicGraph;
 import org.jgrapht.experimental.dag.DirectedAcyclicGraph.CycleFoundException;
 
+import com.google.gson.Gson;
 import com.google.inject.Inject;
 
 /**
@@ -35,11 +38,13 @@ import com.google.inject.Inject;
 public class FaultListResource {
 	private final FaultTree faulttree;
 	private final Connection con;
+	private Gson gson;
 
 	@Inject
-	public FaultListResource(FaultTree faulttree, Connection con) {
+	public FaultListResource(FaultTree faulttree, Connection con, Gson gson) {
 		this.faulttree = faulttree;
 		this.con = con;
+		this.gson = gson;
 	}
 
 	@POST
@@ -85,9 +90,8 @@ public class FaultListResource {
 	public String sendGetJson(@QueryParam("treeid") String treeid) throws SQLException, CycleFoundException {
 		DirectedAcyclicGraph<String, JoinerEdge> graph = faulttree.getFaultTreeForID(Integer.parseInt(treeid));
 
-		String result = "[";
 		Iterator<String> it = graph.iterator();
-		System.out.println(it.hasNext());
+		List<FaultListEntry> result = new ArrayList<>();
 		while (it.hasNext()) {
 			try {
 				String vertex = it.next();
@@ -99,21 +103,22 @@ public class FaultListResource {
 				}
 				children = StringUtils.removeEnd(children.trim(), ",");
 
-				result += "{\"rowid\":\"" + rowid + "\", \"name\":\"" + vertex + "\", ";
 				Iterator<JoinerEdge> edges = graph.edgesOf(vertex).iterator();
+				FaultTreeJoiner joiner;
 				if (edges.hasNext()) {
-					FaultTreeJoiner joiner = edges.next().getJoiner();
-					result += "\"joiner\":\"" + joiner + "\", ";
+					joiner = edges.next().getJoiner();
+				} else {
+					joiner = FaultTreeJoiner.NONE;
 				}
-				result += "\"children\":\"" + children + "\"},";
-				result += "\n";
+
+				FaultListEntry entry = new FaultListEntry(rowid, vertex, joiner, children);
+				result.add(entry);
 			} catch (Exception ex) {
 				System.err.println(ex.getMessage());
 			}
 		}
 
-		result = StringUtils.removeEnd(result.trim(), ",") + "]";
-		return result;
+		return gson.toJson(result);
 	}
 
 	private int getRowidForName(String name) throws SQLException {
