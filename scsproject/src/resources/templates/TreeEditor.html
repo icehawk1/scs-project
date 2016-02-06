@@ -4,7 +4,7 @@
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 		<title>Homepage</title>
 		<link rel="stylesheet" href="/staticfiles/webix/webix.css" type="text/css" charset="utf-8">
-		<script src="/staticfiles/webix/webix.js" type="application/javascript" charset="utf-8" ></script>
+		<script src="/staticfiles/webix/webix_debug.js" type="application/javascript" charset="utf-8" ></script>
 
 		<!-- Fault Tree -->
 		<script type="text/javascript" charset="utf-8">
@@ -24,8 +24,8 @@
 			window.setInterval(function(){
 				faultTree.clearAll();
 				faultTree.load("/FaultTree/json?treeid=${treeid}");
-				faultList.clearAll();
-				faultList.load("/FaultList/json?treeid=${treeid}");
+			//	faultList.clearAll();
+			//	faultList.load("/FaultList/json?treeid=${treeid}");
 			}, 5000);
 
 			// Fault list
@@ -60,8 +60,6 @@
 		try {
 		    xmlHttp = new XMLHttpRequest();
 			if (xmlHttp) {
-				// xmlHttp.open('GET', 'http://localhost:8080/TreeEditor?treeid=42', false);
-			    // xmlHttp.open('GET', 'file:///tmp/blub.html', false);
 				xmlHttp.open('POST', '/FaultList/AddRow?treeid=42', false);
 			    xmlHttp.onreadystatechange = function () {
 			        if (xmlHttp.readyState == 4) {
@@ -75,8 +73,8 @@
 		}
 	}
 		</script>
-		<p><div id="treecanvas" style='width:900px; height:350px; '></div>
-		<p><div id="tablecanvas" style='width:900px; height:350px; '></div>
+		<p><div id="treecanvas" style='width:900px; height:250px; '></div>
+		<p><div id="tablecanvas" style='width:900px; height:450px; '></div>
 
 		<form >
 			<input type="hidden" name="treeid" value="${treeid}" />

@@ -46,20 +46,22 @@ public class FaultListResource extends JerseyResource {
 	@POST
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
 	public void receivePostForm(@QueryParam("treeid") String treeid, @FormParam("name") String name,
-			@FormParam("joiner") String joiner, @FormParam("children") String children, @FormParam("id") String id,
-			@FormParam("comment") String comment, @FormParam("webix_operation") String op) throws SQLException {
+			@FormParam("joiner") String joiner, @FormParam("children") String children,
+			@FormParam("rowid") String rowid, @FormParam("comment") String comment,
+			@FormParam("webix_operation") String op) throws SQLException {
 
-		System.out.println("FaultList save: " + op + ", " + id);
+		System.out.println("FaultList save: " + name + ", " + op + ", " + rowid);
 
 		Connection con = Main.getInjector().getInstance(Connection.class);
 		if (op.equals("update")) {
-			PreparedStatement stmt = con
-					.prepareStatement("UPDATE FaultList SET name=?, joiner=?, children=?, comment=? WHERE rowid=?");
+			PreparedStatement stmt = con.prepareStatement(
+					"UPDATE FaultList SET name=?, joiner=?, children=?, comment=? WHERE rowid=? AND treeid=?");
 			stmt.setString(1, name);
 			stmt.setString(2, joiner);
 			stmt.setString(3, children);
 			stmt.setString(4, comment);
-			stmt.setLong(5, Long.parseLong(id));
+			stmt.setLong(5, Long.parseLong(rowid));
+			stmt.setLong(6, Long.parseLong(treeid));
 			stmt.execute();
 		}
 	}
@@ -86,9 +88,10 @@ public class FaultListResource extends JerseyResource {
 		DirectedAcyclicGraph<String, JoinerEdge> graph = faulttree.getFaultTreeForID(Integer.parseInt(treeid));
 
 		String result = "[";
-		try {
-			Iterator<String> it = graph.iterator();
-			while (it.hasNext()) {
+		Iterator<String> it = graph.iterator();
+		System.out.println(it.hasNext());
+		while (it.hasNext()) {
+			try {
 				String vertex = it.next();
 				int rowid = getRowidForName(vertex);
 
@@ -106,26 +109,25 @@ public class FaultListResource extends JerseyResource {
 				}
 				result += "\"children\":\"" + children + "\"},";
 				result += "\n";
+			} catch (Exception ex) {
+				System.err.println(ex.getMessage());
 			}
-		} catch (Exception ex) {
-			ex.printStackTrace();
 		}
 
 		result = StringUtils.removeEnd(result.trim(), ",") + "]";
 		return result;
 	}
 
-	private int getRowidForName(String name) {
-		PreparedStatement stmt;
-		try {
-			stmt = con.prepareStatement("SELECT rowid FROM FaultList WHERE name=?");
-			stmt.setString(1, name);
-			ResultSet rs = stmt.executeQuery();
-			int result = rs.getInt("rowid");
-			return result;
-		} catch (SQLException e) {
-			e.printStackTrace();
-			return -1;
-		}
+	private int getRowidForName(String name) throws SQLException {
+		PreparedStatement stmt = con.prepareStatement("SELECT rowid FROM FaultList WHERE name=?");
+		System.out.println("name: " + name);
+		stmt.setString(1, name);
+
+		ResultSet rs = stmt.executeQuery();
+		if (rs.isClosed())
+			System.err
+					.println("An event named '" + name + "' does not exist. Maybe you misstyped when adding children?");
+		int result = rs.getInt("rowid");
+		return result;
 	}
 }
