@@ -69,9 +69,9 @@ public class FaultListResource {
 		}
 	}
 
-	@Path("AddRow")
+	@Path("AddEvent")
 	@POST
-	public String acceptPostAddRow(@QueryParam("treeid") String treeid) throws SQLException {
+	public String acceptPostAddEvent(@QueryParam("treeid") String treeid) throws SQLException {
 		System.out.println("add row: " + treeid);
 		try {
 			PreparedStatement stmt = con.prepareStatement("INSERT INTO FaultList (treeid,name) VALUES (?,?)");
@@ -123,7 +123,6 @@ public class FaultListResource {
 
 	private int getRowidForName(String name) throws SQLException {
 		PreparedStatement stmt = con.prepareStatement("SELECT rowid FROM FaultList WHERE name=?");
-		System.out.println("name: " + name);
 		stmt.setString(1, name);
 
 		ResultSet rs = stmt.executeQuery();

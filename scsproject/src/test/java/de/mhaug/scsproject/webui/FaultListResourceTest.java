@@ -31,8 +31,6 @@ public class FaultListResourceTest extends AbstractTest {
 		List<FaultListEntry> actualList = gson.fromJson(actualJson, new TypeToken<List<FaultListEntry>>() {
 		}.getType());
 
-		System.out.println(actualJson);
-
 		assertEquals(6, actualList.size());
 		assertTrue(actualList.contains(new FaultListEntry(2, "Event 1", null, "")));
 	}

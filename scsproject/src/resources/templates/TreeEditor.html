@@ -1,13 +1,14 @@
 <!DOCTYPE HTML>
 <html>
     <head>
-		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<meta http-equiv="Content-Type" content="text/html; charset=${charset}" />
+		<link rel="stylesheet" href="${webix-cssfile}" type="text/css" charset="${charset}">
+		<script src="${webix-jsfile}" type="application/javascript" charset="${charset}" ></script>
+
 		<title>Homepage</title>
-		<link rel="stylesheet" href="${webix.cssfile}" type="text/css" charset="utf-8">
-		<script src="${webix.jsfile}" type="application/javascript" charset="utf-8" ></script>
 
 		<!-- Fault Tree -->
-		<script type="text/javascript" charset="utf-8">
+		<script type="text/javascript" charset="${charset}">
 			var faultTree;
 			webix.ready(function(){
 				faultTree = new webix.ui({
@@ -15,7 +16,7 @@
 					view:"organogram",
 					select: false,
 					borderless: true,
-					url: "/FaultTree/json?treeid=${treeid}",
+					url: "${treeLoadUrl}?treeid=${treeid}",
 					datatype: "json"
 				});
 			});
@@ -23,9 +24,7 @@
 			//Keep fault tree up to date
 			window.setInterval(function(){
 				faultTree.clearAll();
-				faultTree.load("/FaultTree/json?treeid=${treeid}");
-			//	faultList.clearAll();
-			//	faultList.load("/FaultList/json?treeid=${treeid}");
+				faultTree.load("${treeLoadUrl}?treeid=${treeid}");
 			}, 5000);
 
 			// Fault list
@@ -37,7 +36,7 @@
 					columns: [
 						{ id:"rowid", header:"id", width:30},
 						{ id:"name", header:"Name", width:100, editor:"text"},
-						{ id:"joiner", header:"Joiner", width:80, editor:"richselect", options:["None","AND", "OR"]},
+						{ id:"joiner", header:"Joiner", width:80, editor:"richselect", options:${possibleJoiners}},
 						{ id:"children", header:"Children", width:200, editor:"text"},
 						{ id:"comment", header:"Comment", width:200, editor:"text"}
 					],
@@ -45,8 +44,8 @@
 					editable:true,
 					autoheight:true,
 					autowidth:true,
-					save:"/FaultList?treeid=${treeid}",
-					url: "/FaultList/json?treeid=${treeid}",
+					save:"${listSaveUrl}?treeid=${treeid}",
+					url: "${listLoadUrl}?treeid=${treeid}",
 					datatype: "json"
 				});
 			});
@@ -60,7 +59,7 @@
 		try {
 		    xmlHttp = new XMLHttpRequest();
 			if (xmlHttp) {
-				xmlHttp.open('POST', '/FaultList/AddRow?treeid=42', false);
+				xmlHttp.open('POST', '${addEventUrl}?treeid=42', false);
 			    xmlHttp.onreadystatechange = function () {
 			        if (xmlHttp.readyState == 4) {
 			            alert(xmlHttp.responseText);

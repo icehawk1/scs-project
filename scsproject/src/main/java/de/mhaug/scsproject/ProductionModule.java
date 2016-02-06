@@ -1,5 +1,6 @@
 package de.mhaug.scsproject;
 
+import de.mhaug.scsproject.model.FaultTreeJoiner;
 import de.mhaug.scsproject.webui.TreeListResource;
 import de.mhaug.scsproject.webui.VelocityResource;
 
@@ -13,6 +14,7 @@ import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.VelocityEngine;
 import org.apache.velocity.context.Context;
 
+import com.google.gson.Gson;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import com.google.inject.Singleton;
@@ -21,22 +23,33 @@ public class ProductionModule extends AbstractModule {
 	@Override
 	protected void configure() {
 		bind(VelocityResource.class).to(TreeListResource.class);
-		bind(Context.class).to(VelocityContext.class);
 	}
 
 	@Provides
-	public VelocityEngine provideVelocityEngine() {
+	private Context provideVelocityContext(Gson gson) {
+		VelocityContext result = new VelocityContext();
+		result.put("webix-jsfile", "/staticfiles/webix/webix_debug.js");
+		result.put("webix-cssfile", "/staticfiles/webix/webix.css");
+		result.put("charset", "UTF-8");
+		result.put("possibleJoiners", gson.toJson(FaultTreeJoiner.values()));
+
+		return result;
+	}
+
+	@Provides
+	private VelocityEngine provideVelocityEngine() {
 		VelocityEngine result = new VelocityEngine();
 		Properties props = new Properties();
 		props.setProperty("file.resource.loader.path", "src/resources/templates");
 		props.setProperty("file.resource.loader.modificationCheckInterval", "10");
+		props.setProperty("runtime.references.strict", "true");
 		result.init(props);
 		return result;
 	}
 
 	@Provides
 	@Singleton
-	public Connection provideDBconnection() throws SQLException {
+	private Connection provideDBconnection() throws SQLException {
 		Connection result = DriverManager.getConnection("jdbc:sqlite:internal.db");
 
 		Statement stmt = result.createStatement();

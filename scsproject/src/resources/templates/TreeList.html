@@ -1,12 +1,13 @@
 <!DOCTYPE HTML>
 <html>
     <head>
-		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-		<title>List of Trees</title>
-		<link rel="stylesheet" href="/staticfiles/webix/webix.css" type="text/css" charset="utf-8">
-		<script src="/staticfiles/webix/webix_debug.js" type="application/javascript" charset="utf-8" ></script>
+		<meta http-equiv="Content-Type" content="text/html; charset=${charset}" />
+		<link rel="stylesheet" href="${webix-cssfile}" type="text/css" charset="${charset}">
+		<script src="${webix-jsfile}" type="application/javascript" charset="${charset}" ></script>
 
-		<script type="text/javascript" charset="utf-8">
+		<title>List of Trees</title>
+
+		<script type="text/javascript" charset="${charset}">
 		var treeList;
 		webix.ready(function(){
 			treeList = new webix.ui({
@@ -22,7 +23,7 @@
 				editable:false,
 				autoheight:true,
 				autowidth:true,
-				url: "/",
+				url: "${treeListLoadUrl}",
 				datatype: "json"
 			});
 		});
@@ -33,7 +34,7 @@
 		//Keep tree list up to date
 		window.setInterval(function(){
 			treeList.clearAll();
-			treeList.load("/");
+			treeList.load("${treeListLoadUrl}");
 		}, 5000);
 
 		</script>
