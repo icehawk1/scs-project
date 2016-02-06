@@ -9,6 +9,10 @@
 
 		<!-- Fault Tree -->
 		<script type="text/javascript" charset="${charset}">
+			webix.attachEvent("onBeforeAjax", function(mode, url, data, request, headers){
+	  			headers["Accept"] = "application/json";
+			})
+
 			var faultTree;
 			webix.ready(function(){
 				faultTree = new webix.ui({

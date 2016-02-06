@@ -30,7 +30,6 @@ public class FaultTreeResource {
 		this.dfs = dfs;
 	}
 
-	@Path("json")
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	public String sendGetJson(@QueryParam("treeid") String treeid) throws SQLException, CycleFoundException {

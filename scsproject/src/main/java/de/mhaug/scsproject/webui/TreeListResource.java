@@ -44,7 +44,6 @@ public class TreeListResource extends VelocityResource {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	public String sendGetJson() throws SQLException, CycleFoundException {
-		System.out.println("TreeList/json");
 		PreparedStatement stmt = con.prepareStatement("Select rowid,name from FaultTree");
 		ResultSet rs = stmt.executeQuery();
 
@@ -54,7 +53,6 @@ public class TreeListResource extends VelocityResource {
 		}
 
 		String result = gson.toJson(treelist.liste);
-		System.out.println(result);
 		return result;
 
 	}

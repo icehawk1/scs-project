@@ -3,6 +3,8 @@ package de.mhaug.scsproject.webui;
 import java.io.IOException;
 import java.io.StringWriter;
 
+import javax.ws.rs.core.UriBuilder;
+
 import org.apache.velocity.app.VelocityEngine;
 import org.apache.velocity.context.Context;
 
@@ -27,11 +29,23 @@ public abstract class VelocityResource {
 	 */
 	@Inject
 	public void init() {
-		context.put("treeLoadUrl", "/FaultTree/json");
-		context.put("listSaveUrl", "/FaultList");
-		context.put("listLoadUrl", "/FaultList/json");
-		context.put("addEventUrl", "/FaultList/addEvent");
-		context.put("treeListLoadUrl", "/");
+		context.put("treeLoadUrl", getUrlOfResource(FaultTreeResource.class));
+		context.put("listSaveUrl", getUrlOfResource(FaultListResource.class));
+		context.put("listLoadUrl", getUrlOfResource(FaultListResource.class));
+		context.put("addEventUrl", getUrlOfResource(FaultListResource.class, "acceptPostAddEvent"));
+		context.put("treeListLoadUrl", getUrlOfResource(TreeListResource.class));
+	}
+
+	private String getUrlOfResource(Class resourceClass, String methodName) {
+		UriBuilder builder = UriBuilder.fromResource(resourceClass);
+		String result = builder.path(resourceClass, methodName).build().toString();
+		return result;
+	}
+
+	private String getUrlOfResource(Class resourceClass) {
+		UriBuilder builder = UriBuilder.fromResource(resourceClass);
+		String result = builder.path(resourceClass).build().toString();
+		return result;
 	}
 
 	/**

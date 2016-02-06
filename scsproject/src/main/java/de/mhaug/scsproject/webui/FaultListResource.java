@@ -84,7 +84,6 @@ public class FaultListResource {
 		return "row added";
 	}
 
-	@Path("json")
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	public String sendGetJson(@QueryParam("treeid") String treeid) throws SQLException, CycleFoundException {
