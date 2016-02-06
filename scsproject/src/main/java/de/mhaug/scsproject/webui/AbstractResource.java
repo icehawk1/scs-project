@@ -11,7 +11,7 @@ import org.apache.velocity.context.Context;
  * 
  * @author martin
  */
-abstract class JerseyResource {
+public abstract class AbstractResource {
 	public String mergeVelocityTemplate(String templatename, Context context) {
 		StringWriter writer = new StringWriter();
 		Velocity.mergeTemplate(templatename, "UTF-8", context, writer);

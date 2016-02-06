@@ -2,8 +2,8 @@ package de.mhaug.scsproject;
 
 import de.mhaug.scsproject.webui.FaultListResource;
 import de.mhaug.scsproject.webui.FaultTreeResource;
-import de.mhaug.scsproject.webui.RootResource;
 import de.mhaug.scsproject.webui.TreeEditorResource;
+import de.mhaug.scsproject.webui.TreeListResource;
 
 import java.io.IOException;
 import java.net.URI;
@@ -38,7 +38,7 @@ public class Main {
 	 * @throws SQLException
 	 */
 	public static void main(String[] args) throws IOException, SQLException {
-		injector = Guice.createInjector(new GuiceModule());
+		injector = Guice.createInjector(new ProductionModule());
 		Main main = injector.getInstance(Main.class);
 
 		main.initVelocity();
@@ -81,10 +81,7 @@ public class Main {
 		// providers
 		// in de.mhaug.scsproject package
 		final ResourceConfig rc = new ResourceConfig().packages("de.mhaug.scsproject.webui");
-		rc.register(getInjector().getInstance(FaultTreeResource.class));
-		rc.register(getInjector().getInstance(FaultListResource.class));
-		rc.register(getInjector().getInstance(RootResource.class));
-		rc.register(getInjector().getInstance(TreeEditorResource.class));
+		registerResources(rc);
 
 		// create and start a new instance of grizzly http server
 		// exposing the Jersey application at BASE_URI
@@ -93,6 +90,13 @@ public class Main {
 		// Add handler which serves static files
 		server.getServerConfiguration().addHttpHandler(new StaticHttpHandler("src/resources/staticfiles"),
 				"/staticfiles");
+	}
+
+	private void registerResources(final ResourceConfig rc) {
+		rc.register(injector.getInstance(FaultTreeResource.class));
+		rc.register(injector.getInstance(FaultListResource.class));
+		rc.register(injector.getInstance(TreeEditorResource.class));
+		rc.register(injector.getInstance(TreeListResource.class));
 	}
 
 	private void shutdownServer() {
@@ -104,9 +108,5 @@ public class Main {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-	}
-
-	public static Injector getInjector() {
-		return injector;
 	}
 }

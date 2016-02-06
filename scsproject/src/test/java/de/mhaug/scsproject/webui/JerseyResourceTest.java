@@ -10,11 +10,11 @@ import org.junit.Before;
 import org.junit.Test;
 
 public class JerseyResourceTest extends AbstractTest {
-	private JerseyResource instance;
+	private AbstractResource instance;
 
 	@Before
 	public void setUp() throws Exception {
-		instance = new RootResource();
+		instance = getInjector().getInstance(AbstractResource.class);
 	}
 
 	@Test

@@ -14,7 +14,7 @@ import com.google.inject.Inject;
  * Root resource (exposed at "myresource" path)
  */
 @Path("/TreeEditor")
-public class TreeEditorResource extends JerseyResource {
+public class TreeEditorResource extends AbstractResource {
 	private VelocityContext context;
 
 	@Inject

@@ -7,12 +7,15 @@ import org.junit.BeforeClass;
 
 import com.google.inject.Guice;
 import com.google.inject.Injector;
+import com.google.inject.util.Modules;
 
 public abstract class AbstractTest {
 	private Injector injector;
 
 	public AbstractTest() {
-		injector = Guice.createInjector(new TestModule());
+		ProductionModule functionalModule = new ProductionModule();
+		TestModule testModule = new TestModule();
+		injector = Guice.createInjector(Modules.override(functionalModule).with(testModule));
 	}
 
 	@BeforeClass

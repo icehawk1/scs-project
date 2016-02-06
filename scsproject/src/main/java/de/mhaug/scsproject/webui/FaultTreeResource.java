@@ -17,7 +17,7 @@ import org.jgrapht.experimental.dag.DirectedAcyclicGraph.CycleFoundException;
 import com.google.inject.Inject;
 
 @Path("/FaultTree")
-public class FaultTreeResource extends JerseyResource {
+public class FaultTreeResource extends AbstractResource {
 	private FaultTree faulttree;
 	private DepthFirstSearch dfs;
 

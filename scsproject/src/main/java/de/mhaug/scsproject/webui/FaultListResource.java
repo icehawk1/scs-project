@@ -1,6 +1,5 @@
 package de.mhaug.scsproject.webui;
 
-import de.mhaug.scsproject.Main;
 import de.mhaug.scsproject.model.FaultTree;
 import de.mhaug.scsproject.model.FaultTreeJoiner;
 import de.mhaug.scsproject.model.JoinerEdge;
@@ -33,7 +32,7 @@ import com.google.inject.Inject;
  * @author Martin Haug
  */
 @Path("/FaultList")
-public class FaultListResource extends JerseyResource {
+public class FaultListResource extends AbstractResource {
 	private FaultTree faulttree;
 	private Connection con;
 
@@ -52,7 +51,6 @@ public class FaultListResource extends JerseyResource {
 
 		System.out.println("FaultList save: " + name + ", " + op + ", " + rowid);
 
-		Connection con = Main.getInjector().getInstance(Connection.class);
 		if (op.equals("update")) {
 			PreparedStatement stmt = con.prepareStatement(
 					"UPDATE FaultList SET name=?, joiner=?, children=?, comment=? WHERE rowid=? AND treeid=?");
