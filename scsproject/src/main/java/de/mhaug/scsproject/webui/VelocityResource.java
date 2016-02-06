@@ -6,12 +6,16 @@ import java.io.StringWriter;
 import org.apache.velocity.app.Velocity;
 import org.apache.velocity.context.Context;
 
-/**
- * Base class for all resources that can be accessed via the web.
- * 
- * @author martin
- */
-public abstract class AbstractResource {
+import com.google.inject.Inject;
+
+public abstract class VelocityResource {
+	protected final Context context;
+
+	@Inject
+	public VelocityResource(Context context) {
+		this.context = context;
+	}
+
 	public String mergeVelocityTemplate(String templatename, Context context) {
 		StringWriter writer = new StringWriter();
 		Velocity.mergeTemplate(templatename, "UTF-8", context, writer);

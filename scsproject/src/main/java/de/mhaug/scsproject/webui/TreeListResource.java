@@ -19,18 +19,14 @@ import com.google.gson.Gson;
 import com.google.gson.annotations.SerializedName;
 import com.google.inject.Inject;
 
-/**
- * Root resource (exposed at "myresource" path)
- */
 @Path("/")
-public class TreeListResource extends AbstractResource {
-	private VelocityContext context;
-	private Connection con;
-	private Gson gson;
+public class TreeListResource extends VelocityResource {
+	private final Connection con;
+	private final Gson gson;
 
 	@Inject
 	public TreeListResource(VelocityContext context, Connection con, Gson gson) {
-		this.context = context;
+		super(context);
 		this.con = con;
 		this.gson = gson;
 	}

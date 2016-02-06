@@ -1,7 +1,7 @@
 package de.mhaug.scsproject;
 
-import de.mhaug.scsproject.webui.AbstractResource;
 import de.mhaug.scsproject.webui.TreeListResource;
+import de.mhaug.scsproject.webui.VelocityResource;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -14,7 +14,7 @@ import com.google.inject.Singleton;
 public class ProductionModule extends AbstractModule {
 	@Override
 	protected void configure() {
-		bind(AbstractResource.class).to(TreeListResource.class);
+		bind(VelocityResource.class).to(TreeListResource.class);
 	}
 
 	@Provides

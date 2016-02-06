@@ -32,9 +32,9 @@ import com.google.inject.Inject;
  * @author Martin Haug
  */
 @Path("/FaultList")
-public class FaultListResource extends AbstractResource {
-	private FaultTree faulttree;
-	private Connection con;
+public class FaultListResource {
+	private final FaultTree faulttree;
+	private final Connection con;
 
 	@Inject
 	public FaultListResource(FaultTree faulttree, Connection con) {

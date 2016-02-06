@@ -10,11 +10,11 @@ import org.junit.Before;
 import org.junit.Test;
 
 public class JerseyResourceTest extends AbstractTest {
-	private AbstractResource instance;
+	private VelocityResource instance;
 
 	@Before
 	public void setUp() throws Exception {
-		instance = getInjector().getInstance(AbstractResource.class);
+		instance = getInjector().getInstance(VelocityResource.class);
 	}
 
 	@Test

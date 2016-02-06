@@ -14,12 +14,10 @@ import com.google.inject.Inject;
  * Root resource (exposed at "myresource" path)
  */
 @Path("/TreeEditor")
-public class TreeEditorResource extends AbstractResource {
-	private VelocityContext context;
-
+public class TreeEditorResource extends VelocityResource {
 	@Inject
 	public TreeEditorResource(VelocityContext context) {
-		this.context = context;
+		super(context);
 	}
 
 	/**
