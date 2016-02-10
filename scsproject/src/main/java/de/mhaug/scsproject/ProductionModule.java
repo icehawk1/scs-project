@@ -1,8 +1,8 @@
 package de.mhaug.scsproject;
 
 import de.mhaug.scsproject.model.FaultTreeJoiner;
-import de.mhaug.scsproject.webui.TreeListResource;
-import de.mhaug.scsproject.webui.VelocityResource;
+import de.mhaug.scsproject.view.TreeListResource;
+import de.mhaug.scsproject.view.VelocityResource;
 
 import java.sql.Connection;
 import java.sql.DriverManager;

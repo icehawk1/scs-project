@@ -4,6 +4,8 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import de.mhaug.scsproject.AbstractTest;
+import de.mhaug.scsproject.model.FaultListEntry;
+import de.mhaug.scsproject.view.FaultListResource;
 
 import java.sql.SQLException;
 import java.util.List;

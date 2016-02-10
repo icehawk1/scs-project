@@ -1,6 +1,4 @@
-package de.mhaug.scsproject.webui;
-
-import de.mhaug.scsproject.model.FaultTreeJoiner;
+package de.mhaug.scsproject.model;
 
 import com.google.gson.annotations.SerializedName;
 
@@ -24,7 +22,7 @@ public class FaultListEntry {
 		this.rowid = rowid;
 		this.name = name;
 		this.joiner = joiner;
-		this.children = children;
+		this.children = children.trim();
 		this.comment = comment;
 	}
 

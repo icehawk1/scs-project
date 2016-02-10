@@ -1,6 +1,4 @@
-package de.mhaug.scsproject.webui;
-
-import de.mhaug.scsproject.model.JoinerEdge;
+package de.mhaug.scsproject.model;
 
 import java.util.HashSet;
 import java.util.Set;

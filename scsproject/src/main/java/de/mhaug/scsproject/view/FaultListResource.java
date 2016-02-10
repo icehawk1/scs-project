@@ -1,5 +1,6 @@
-package de.mhaug.scsproject.webui;
+package de.mhaug.scsproject.view;
 
+import de.mhaug.scsproject.model.FaultListEntry;
 import de.mhaug.scsproject.model.FaultTree;
 import de.mhaug.scsproject.model.FaultTreeJoiner;
 import de.mhaug.scsproject.model.JoinerEdge;

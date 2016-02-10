@@ -1,9 +1,9 @@
 package de.mhaug.scsproject;
 
-import de.mhaug.scsproject.webui.FaultListResource;
-import de.mhaug.scsproject.webui.FaultTreeResource;
-import de.mhaug.scsproject.webui.TreeEditorResource;
-import de.mhaug.scsproject.webui.TreeListResource;
+import de.mhaug.scsproject.view.FaultListResource;
+import de.mhaug.scsproject.view.FaultTreeResource;
+import de.mhaug.scsproject.view.TreeEditorResource;
+import de.mhaug.scsproject.view.TreeListResource;
 
 import java.io.IOException;
 import java.net.URI;

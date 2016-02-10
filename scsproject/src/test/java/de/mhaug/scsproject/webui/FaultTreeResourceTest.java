@@ -3,6 +3,8 @@ package de.mhaug.scsproject.webui;
 import static org.junit.Assert.assertEquals;
 
 import de.mhaug.scsproject.AbstractTest;
+import de.mhaug.scsproject.model.FaultTreeEntry;
+import de.mhaug.scsproject.view.FaultTreeResource;
 
 import java.sql.SQLException;
 

@@ -1,4 +1,4 @@
-package de.mhaug.scsproject.webui;
+package de.mhaug.scsproject.model;
 
 import java.util.ArrayList;
 import java.util.List;

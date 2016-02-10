@@ -1,4 +1,4 @@
-package de.mhaug.scsproject.webui;
+package de.mhaug.scsproject.view;
 
 import java.io.IOException;
 import java.io.StringWriter;

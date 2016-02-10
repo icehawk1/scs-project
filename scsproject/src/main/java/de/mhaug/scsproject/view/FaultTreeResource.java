@@ -1,6 +1,8 @@
-package de.mhaug.scsproject.webui;
+package de.mhaug.scsproject.view;
 
+import de.mhaug.scsproject.model.DepthFirstSearch;
 import de.mhaug.scsproject.model.FaultTree;
+import de.mhaug.scsproject.model.FaultTreeEntry;
 import de.mhaug.scsproject.model.JoinerEdge;
 
 import java.sql.SQLException;

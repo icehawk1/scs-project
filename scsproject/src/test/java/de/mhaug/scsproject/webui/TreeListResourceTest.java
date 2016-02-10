@@ -3,6 +3,7 @@ package de.mhaug.scsproject.webui;
 import static org.junit.Assert.assertTrue;
 
 import de.mhaug.scsproject.AbstractTest;
+import de.mhaug.scsproject.view.TreeListResource;
 
 import org.junit.Before;
 import org.junit.Test;

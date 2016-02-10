@@ -3,6 +3,7 @@ package de.mhaug.scsproject.webui;
 import static org.junit.Assert.assertEquals;
 
 import de.mhaug.scsproject.AbstractTest;
+import de.mhaug.scsproject.view.VelocityResource;
 
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.context.Context;
