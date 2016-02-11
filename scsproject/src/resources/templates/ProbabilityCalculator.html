@@ -1,0 +1,49 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+		<meta http-equiv="Content-Type" content="text/html; charset=${charset}" />
+		<link rel="stylesheet" href="${webix-cssfile}" type="text/css" charset="${charset}">
+		<script src="${webix-jsfile}" type="application/javascript" charset="${charset}" ></script>
+
+		<title>Probability Calculator</title>
+
+		<script type="text/javascript" charset="${charset}">
+			webix.attachEvent("onBeforeAjax", function(mode, url, data, request, headers){
+	  			headers["Accept"] = "application/json";
+			})
+
+			//Keep fault tree up to date
+			window.setInterval(function(){
+				probCalc.clearAll();
+				probCalc.load("${probsLoadUrl}?treeid=${treeid}");
+			}, 5000);
+
+			// Fault list
+			var faultList;
+			webix.ready(function(){
+				probCalc = new webix.ui({
+					container:"probCalcCanvas",
+					view:"datatable",
+					columns: [
+						{ id:"rowid", header:"id", width:30},
+						{ id:"name", header:"Name", width:100, editor:"text"},
+						{ id:"joiner", header:"Joiner", width:80, editor:"richselect", options:${possibleJoiners}},
+						{ id:"children", header:"Children", width:200, editor:"text"},
+						{ id:"comment", header:"Comment", width:200, editor:"text"}
+					],
+
+					editable:true,
+					autoheight:true,
+					autowidth:true,
+					save:"${probsSaveUrl}?treeid=${treeid}",
+					url: "${probsLoadUrl}?treeid=${treeid}",
+					datatype: "json"
+				});
+			});
+
+		</script>
+    </head>
+    <body>
+		<p><div id="probCalcCanvas" style='width:900px; height:250px; '></div>
+    </body>
+</html>

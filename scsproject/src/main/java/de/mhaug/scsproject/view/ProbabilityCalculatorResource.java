@@ -35,11 +35,14 @@ public class ProbabilityCalculatorResource extends VelocityResource {
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	public void receivePostJson(@QueryParam("probabilities") String probs) {
+		System.out.println("ProbabilityCalculator post json");
 	}
 
 	@GET
 	@Produces(MediaType.TEXT_HTML)
 	public String sendGetHtml(@QueryParam("treeid") String treeid) {
+		System.out.println("ProbabilityCalculator get html");
+
 		context.put("treeid", treeid);
 		return mergeVelocityTemplate("ProbabilityCalculator.html", context);
 	}
@@ -47,8 +50,15 @@ public class ProbabilityCalculatorResource extends VelocityResource {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	public String sendGetJson(@QueryParam("treeid") String treeid) {
-		List<FaultListEntry> leaves = getLeaves(treeid);
-		return gson.toJson(leaves);
+		System.out.println("ProbabilityCalculator get json");
+
+		try {
+			List<FaultListEntry> leaves = getLeaves(treeid);
+			return gson.toJson(leaves);
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			return "[]";
+		}
 	}
 
 	private List<FaultListEntry> getLeaves(String treeid) {
@@ -63,9 +73,12 @@ public class ProbabilityCalculatorResource extends VelocityResource {
 				int rowid = rs.getInt("rowid");
 				String name = rs.getString("name");
 				String joinerStr = rs.getString("joiner");
-				FaultTreeJoiner joiner = joinerStr.trim().isEmpty() ? FaultTreeJoiner.NONE
-						: FaultTreeJoiner.valueOf(joinerStr);
 				String children = rs.getString("children");
+
+				FaultTreeJoiner joiner = FaultTreeJoiner.NONE;
+				if (joinerStr != null && !joinerStr.trim().isEmpty()) {
+					FaultTreeJoiner.valueOf(joinerStr);
+				}
 
 				assert children.trim().isEmpty();
 				result.add(new FaultListEntry(rowid, name, joiner, children));

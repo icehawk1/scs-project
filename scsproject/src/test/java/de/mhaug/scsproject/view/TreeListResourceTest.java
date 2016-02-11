@@ -1,4 +1,4 @@
-package de.mhaug.scsproject.webui;
+package de.mhaug.scsproject.view;
 
 import static org.junit.Assert.assertTrue;
 
