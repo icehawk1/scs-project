@@ -17,33 +17,34 @@
 				probCalc.clearAll();
 				probCalc.load("${probsLoadUrl}?treeid=${treeid}");
 			}, 5000);
-
-			// Fault list
-			var faultList;
-			webix.ready(function(){
-				probCalc = new webix.ui({
-					container:"probCalcCanvas",
-					view:"datatable",
-					columns: [
-						{ id:"rowid", header:"id", width:30},
-						{ id:"name", header:"Name", width:100, editor:"text"},
-						{ id:"joiner", header:"Joiner", width:80, editor:"richselect", options:${possibleJoiners}},
-						{ id:"children", header:"Children", width:200, editor:"text"},
-						{ id:"comment", header:"Comment", width:200, editor:"text"}
-					],
-
-					editable:true,
-					autoheight:true,
-					autowidth:true,
-					save:"${probsSaveUrl}?treeid=${treeid}",
-					url: "${probsLoadUrl}?treeid=${treeid}",
-					datatype: "json"
-				});
-			});
-
 		</script>
     </head>
     <body>
-		<p><div id="probCalcCanvas" style='width:900px; height:250px; '></div>
+		<p><script type="text/javascript" charset="${charset}">
+			probCalc = new webix.ui({
+				view:"datatable",
+				columns: [
+					{ id:"rowid", header:"id", width:30},
+					{ id:"name", header:"Name", width:100},
+					{ id:"prob", header:"Probability", width:100, validate:webix.rules.isNumber, editor:"text",
+					  on:{ "onChange":function() {
+						  alert('validation');
+					        //either validate the whole form
+					        this.getParentView().validate();
+					        //or validate this element only
+					        this.validate();
+						}}
+					},
+					{ id:"comment", header:"Comment", width:200}
+				],
+
+				editable:true,
+				autoheight:true,
+				autowidth:true,
+				save:"${probsSaveUrl}?treeid=${treeid}",
+				url: "${probsLoadUrl}?treeid=${treeid}",
+				datatype: "json"
+			});
+		</script>
     </body>
 </html>
