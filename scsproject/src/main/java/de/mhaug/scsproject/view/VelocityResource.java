@@ -36,7 +36,7 @@ public abstract class VelocityResource {
 		try {
 			UriBuilder builder = UriBuilder.fromResource(resourceClass);
 			String result = builder.path(resourceClass, methodName).build().toString();
-			return result;
+			return "/" + result;
 		} catch (IllegalArgumentException ex) {
 			// The method was not annotated with @Path ...
 			// Yes, this is ugly.
@@ -47,7 +47,7 @@ public abstract class VelocityResource {
 	String getUrlOfResource(Class resourceClass) {
 		UriBuilder builder = UriBuilder.fromResource(resourceClass);
 		String result = builder.build().toString();
-		return result;
+		return "/" + result;
 	}
 
 	/**

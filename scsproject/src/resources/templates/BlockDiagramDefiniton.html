@@ -1,0 +1,39 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+		<meta http-equiv="Content-Type" content="text/html; charset=${charset}" />
+		<link rel="stylesheet" href="${webix-cssfile}" type="text/css" charset="${charset}">
+		<script src="${webix-jsfile}" type="application/javascript" charset="${charset}" ></script>
+
+		<title>Defining the items and their dependencies</title>
+
+		<script type="text/javascript" charset="${charset}">
+		var treeList;
+		webix.ready(function(){
+			treeList = new webix.ui({
+				container: "bdDefinitionCanvas",
+				view: "datatable",
+				columns: [
+					{ id:"rowid", header:"id"},
+					{ id:"item", header:"Item"},
+					{ id:"requiredBy", header:"Required By", width: 150}
+				],
+
+				editable: false,
+				autoheight: true,
+				autowidth: true,
+				url: "${bdDefinitionLoadUrl}",
+				datatype: "json"
+			});
+		});
+		webix.attachEvent("onBeforeAjax", function(mode, url, data, request, headers){
+  			headers["Accept"] = "application/json";
+		})
+
+		</script>
+	</head>
+	<body id="body">
+		<div id="bdDefinitionCanvas"></div>
+
+	</body>
+</html>
