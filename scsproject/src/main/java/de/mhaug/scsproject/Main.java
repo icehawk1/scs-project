@@ -1,10 +1,10 @@
 package de.mhaug.scsproject;
 
 import de.mhaug.scsproject.view.BlockDiagrammDefinitionResource;
+import de.mhaug.scsproject.view.ItemListResource;
 
 import java.io.IOException;
 import java.net.URI;
-import java.sql.Connection;
 import java.sql.SQLException;
 
 import org.glassfish.grizzly.http.server.HttpServer;
@@ -66,16 +66,10 @@ public class Main {
 
 	private void registerResources(final ResourceConfig rc) {
 		rc.register(injector.getInstance(BlockDiagrammDefinitionResource.class));
+		rc.register(injector.getInstance(ItemListResource.class));
 	}
 
 	private void shutdownServer() {
 		server.shutdownNow();
-		try {
-			Connection con = injector.getInstance(Connection.class);
-			if (con.isClosed())
-				con.close();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
 	}
 }

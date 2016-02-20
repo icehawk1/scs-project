@@ -1,13 +1,9 @@
 package de.mhaug.scsproject.view;
 
-import de.mhaug.scsproject.model.Criticality;
-import de.mhaug.scsproject.model.Detection;
 import de.mhaug.scsproject.model.FmecaItem;
 import de.mhaug.scsproject.model.ItemStorage;
-import de.mhaug.scsproject.model.Probability;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Collection;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.FormParam;
@@ -34,12 +30,7 @@ public class ItemListResource {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	public String loadJsonData() {
-		List<FmecaItem> data = new ArrayList<>();
-		data.add(new FmecaItem("first item", new ArrayList<String>(), "first failure mode",
-				Criticality.HazardousWithWarning, Probability.Low, Detection.High));
-		data.add(new FmecaItem("second item", new ArrayList<String>(), "second failure mode", Criticality.VeryLow,
-				Probability.VeryHigh, Detection.High));
-
+		Collection<FmecaItem> data = storage.getItems();
 		String result = gson.toJson(data);
 		return result;
 	}

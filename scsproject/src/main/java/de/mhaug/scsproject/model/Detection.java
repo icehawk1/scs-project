@@ -35,6 +35,7 @@ public enum Detection implements FmecaEnum {
 	 * 
 	 * @see de.mhaug.scsproject.model.FmecaEnum#getNumber()
 	 */
+	@SuppressWarnings("static-access")
 	@Override
 	public int getNumber() {
 		return this.values().length - this.ordinal();

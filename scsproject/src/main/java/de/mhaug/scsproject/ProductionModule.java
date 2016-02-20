@@ -1,9 +1,5 @@
 package de.mhaug.scsproject;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.Properties;
 
 import org.apache.velocity.VelocityContext;
@@ -13,7 +9,6 @@ import org.apache.velocity.context.Context;
 import com.google.gson.Gson;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
-import com.google.inject.Singleton;
 
 public class ProductionModule extends AbstractModule {
 	@Override
@@ -38,18 +33,6 @@ public class ProductionModule extends AbstractModule {
 		props.setProperty("file.resource.loader.modificationCheckInterval", "5");
 		props.setProperty("runtime.references.strict", "true");
 		result.init(props);
-		return result;
-	}
-
-	@Provides
-	@Singleton
-	private Connection provideDBconnection() throws SQLException {
-		Connection result = DriverManager.getConnection("jdbc:sqlite:internal.db");
-
-		Statement stmt = result.createStatement();
-		// stmt.execute("CREATE TABLE IF NOT EXISTS Item(" + "description STRING
-		// NOT NULL, " + "" + ")");
-
 		return result;
 	}
 }

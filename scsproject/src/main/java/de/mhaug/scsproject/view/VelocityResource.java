@@ -32,11 +32,17 @@ public abstract class VelocityResource {
 
 	}
 
-	String getUrlOfResource(Class resourceClass, String methodName) {
+	String getUrlOfResource(Class<?> resourceClass, String methodName) {
 		try {
 			UriBuilder builder = UriBuilder.fromResource(resourceClass);
 			String result = builder.path(resourceClass, methodName).build().toString();
-			return "/" + result;
+
+			// For some reason, the path is sometimes absolute and sometimes not
+			// This cant be configured
+			if (result.startsWith("/"))
+				return result;
+			else
+				return "/" + result;
 		} catch (IllegalArgumentException ex) {
 			// The method was not annotated with @Path ...
 			// Yes, this is ugly.
@@ -44,10 +50,14 @@ public abstract class VelocityResource {
 		}
 	}
 
-	String getUrlOfResource(Class resourceClass) {
+	String getUrlOfResource(Class<?> resourceClass) {
 		UriBuilder builder = UriBuilder.fromResource(resourceClass);
 		String result = builder.build().toString();
-		return "/" + result;
+
+		if (result.startsWith("/"))
+			return result;
+		else
+			return "/" + result;
 	}
 
 	/**

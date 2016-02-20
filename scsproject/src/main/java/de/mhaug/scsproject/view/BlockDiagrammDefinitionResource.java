@@ -21,7 +21,9 @@ public class BlockDiagrammDefinitionResource extends VelocityResource {
 	@GET
 	@Produces(MediaType.TEXT_HTML)
 	public String getHtml() {
-		context.put("bdDefinitionLoadUrl", getUrlOfResource(ItemListResource.class, "loadJsonData"));
+		String bdDefUrl = getUrlOfResource(ItemListResource.class, "loadJsonData");
+		System.out.println(bdDefUrl);
+		context.put("bdDefinitionLoadUrl", bdDefUrl);
 		context.put("addItemUrl", getUrlOfResource(ItemListResource.class, "addItem"));
 
 		String result = mergeVelocityTemplate("BlockDiagramDefiniton.html", context);
