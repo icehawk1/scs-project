@@ -14,9 +14,8 @@
 				container: "bdDefinitionCanvas",
 				view: "datatable",
 				columns: [
-					{ id:"rowid", header:"id"},
-					{ id:"item", header:"Item"},
-					{ id:"requiredBy", header:"Required By", width: 150}
+					{ id:"description", header:"Item"},
+					{ id:"failureMode", header:"Required By", width: 150}
 				],
 
 				editable: false,
@@ -33,7 +32,31 @@
 		</script>
 	</head>
 	<body id="body">
+		<script>
+		addRowFunc = function() {
+		var xmlHttp = null;
+		try {
+			xmlHttp = new XMLHttpRequest();
+			if (xmlHttp) {
+				xmlHttp.open('POST', '${addItemUrl}', false);
+				xmlHttp.onreadystatechange = function () {
+					if (xmlHttp.readyState == 4) {
+						alert(xmlHttp.responseText);
+					}
+				};
+				xmlHttp.send();
+			}
+		} catch(e) {
+			alert('exception: '+e);
+		}
+		}
+		</script>
+
 		<div id="bdDefinitionCanvas"></div>
 
+		<form >
+			<button id="addRow" onclick="addRowFunc()">Add entry</button>
+			<button id="RemoveLine">Remove selected entry</button>
+		</form>
 	</body>
 </html>

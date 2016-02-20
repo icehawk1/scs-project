@@ -3,6 +3,7 @@ package de.mhaug.scsproject;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.Properties;
 
 import org.apache.velocity.VelocityContext;
@@ -44,6 +45,10 @@ public class ProductionModule extends AbstractModule {
 	@Singleton
 	private Connection provideDBconnection() throws SQLException {
 		Connection result = DriverManager.getConnection("jdbc:sqlite:internal.db");
+
+		Statement stmt = result.createStatement();
+		// stmt.execute("CREATE TABLE IF NOT EXISTS Item(" + "description STRING
+		// NOT NULL, " + "" + ")");
 
 		return result;
 	}
