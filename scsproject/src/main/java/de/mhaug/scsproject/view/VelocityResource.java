@@ -29,9 +29,7 @@ public abstract class VelocityResource {
 	 */
 	@Inject
 	public void init() {
-		// Example: context.put("probsLoadUrl",
-		// getUrlOfResource(ProbabilityCalculatorResource.class,
-		// "sendGetJson"));
+
 	}
 
 	String getUrlOfResource(Class resourceClass, String methodName) {

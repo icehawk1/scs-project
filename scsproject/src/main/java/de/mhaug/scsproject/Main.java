@@ -1,5 +1,7 @@
 package de.mhaug.scsproject;
 
+import de.mhaug.scsproject.view.BlockDiagrammDefinitionResource;
+
 import java.io.IOException;
 import java.net.URI;
 import java.sql.Connection;
@@ -49,8 +51,7 @@ public class Main {
 	 */
 	public void startServer() {
 		// create a resource config that scans for JAX-RS resources and
-		// providers
-		// in de.mhaug.scsproject package
+		// providers in de.mhaug.scsproject package
 		final ResourceConfig rc = new ResourceConfig().packages("de.mhaug.scsproject.webui");
 		registerResources(rc);
 
@@ -64,6 +65,7 @@ public class Main {
 	}
 
 	private void registerResources(final ResourceConfig rc) {
+		rc.register(injector.getInstance(BlockDiagrammDefinitionResource.class));
 	}
 
 	private void shutdownServer() {

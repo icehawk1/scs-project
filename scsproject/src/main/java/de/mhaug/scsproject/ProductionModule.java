@@ -1,11 +1,8 @@
 package de.mhaug.scsproject;
 
-import de.mhaug.scsproject.model.FaultTreeJoiner;
-
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.Properties;
 
 import org.apache.velocity.VelocityContext;
@@ -28,7 +25,6 @@ public class ProductionModule extends AbstractModule {
 		result.put("webix-jsfile", "/staticfiles/webix/webix_debug.js");
 		result.put("webix-cssfile", "/staticfiles/webix/webix.css");
 		result.put("charset", "UTF-8");
-		result.put("possibleJoiners", gson.toJson(FaultTreeJoiner.values()));
 
 		return result;
 	}
@@ -38,7 +34,7 @@ public class ProductionModule extends AbstractModule {
 		VelocityEngine result = new VelocityEngine();
 		Properties props = new Properties();
 		props.setProperty("file.resource.loader.path", "src/resources/templates");
-		props.setProperty("file.resource.loader.modificationCheckInterval", "10");
+		props.setProperty("file.resource.loader.modificationCheckInterval", "5");
 		props.setProperty("runtime.references.strict", "true");
 		result.init(props);
 		return result;
@@ -48,13 +44,6 @@ public class ProductionModule extends AbstractModule {
 	@Singleton
 	private Connection provideDBconnection() throws SQLException {
 		Connection result = DriverManager.getConnection("jdbc:sqlite:internal.db");
-
-		Statement stmt = result.createStatement();
-		stmt.execute("CREATE TABLE IF NOT EXISTS FaultTree(name STRING NOT NULL )");
-		stmt.execute("CREATE TABLE IF NOT EXISTS FaultList(treeid int NOT NULL"
-				+ ", name STRING NOT NULL, joiner STRING, children STRING, comment STRING,"
-				+ "FOREIGN KEY(treeid) REFERENCES FaultTree(rowid) )");
-		stmt.execute("CREATE INDEX IF NOT EXISTS flname ON FaultList(name)");
 
 		return result;
 	}
