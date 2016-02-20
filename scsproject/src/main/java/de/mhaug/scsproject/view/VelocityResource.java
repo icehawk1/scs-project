@@ -29,16 +29,9 @@ public abstract class VelocityResource {
 	 */
 	@Inject
 	public void init() {
-		context.put("treeLoadUrl", getUrlOfResource(FaultTreeResource.class));
-
-		context.put("listSaveUrl", getUrlOfResource(FaultListResource.class));
-		context.put("listLoadUrl", getUrlOfResource(FaultListResource.class));
-		context.put("addEventUrl", getUrlOfResource(FaultListResource.class, "acceptPostAddEvent"));
-
-		context.put("treeListLoadUrl", getUrlOfResource(TreeListResource.class));
-
-		context.put("probsSaveUrl", getUrlOfResource(ProbabilityCalculatorResource.class, "receivePostJson"));
-		context.put("probsLoadUrl", getUrlOfResource(ProbabilityCalculatorResource.class, "sendGetJson"));
+		// Example: context.put("probsLoadUrl",
+		// getUrlOfResource(ProbabilityCalculatorResource.class,
+		// "sendGetJson"));
 	}
 
 	String getUrlOfResource(Class resourceClass, String methodName) {

@@ -1,8 +1,6 @@
 package de.mhaug.scsproject;
 
 import de.mhaug.scsproject.model.FaultTreeJoiner;
-import de.mhaug.scsproject.view.TreeListResource;
-import de.mhaug.scsproject.view.VelocityResource;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -22,7 +20,6 @@ import com.google.inject.Singleton;
 public class ProductionModule extends AbstractModule {
 	@Override
 	protected void configure() {
-		bind(VelocityResource.class).to(TreeListResource.class);
 	}
 
 	@Provides

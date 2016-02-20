@@ -1,11 +1,5 @@
 package de.mhaug.scsproject;
 
-import de.mhaug.scsproject.view.FaultListResource;
-import de.mhaug.scsproject.view.FaultTreeResource;
-import de.mhaug.scsproject.view.ProbabilityCalculatorResource;
-import de.mhaug.scsproject.view.TreeEditorResource;
-import de.mhaug.scsproject.view.TreeListResource;
-
 import java.io.IOException;
 import java.net.URI;
 import java.sql.Connection;
@@ -70,11 +64,6 @@ public class Main {
 	}
 
 	private void registerResources(final ResourceConfig rc) {
-		rc.register(injector.getInstance(FaultTreeResource.class));
-		rc.register(injector.getInstance(FaultListResource.class));
-		rc.register(injector.getInstance(TreeEditorResource.class));
-		rc.register(injector.getInstance(TreeListResource.class));
-		rc.register(injector.getInstance(ProbabilityCalculatorResource.class));
 	}
 
 	private void shutdownServer() {
