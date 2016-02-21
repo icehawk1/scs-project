@@ -14,14 +14,84 @@
 
 		<script type="text/javascript" charset="${charset}">
 		jQuery(document).ready(function () {
-
 			$('#TableContainer').jtable({
 				title: 'Table of people',
 				actions: {
-					listAction: '${bdDefinitionLoadUrl}',
-					createAction: '${addItemUrl}',
-					updateAction: '/GettingStarted/UpdatePerson',
-					deleteAction: '/GettingStarted/DeletePerson'
+					listAction: function (postData, jtParams) {
+					    return $.Deferred(function (\$dfd) {
+					        $.ajax({
+					            url: '${bdDefinitionLoadUrl}',
+					            type: 'GET',
+					            dataType: 'json',
+					            data: postData,
+								headers: { 'Accept': 'application/json', 'Content-Type': 'application/json'},
+					            success: function (data) {
+									console.log('listAction success');
+					                \$dfd.resolve(data);
+					            },
+					            error: function () {
+									console.log('listAction error');
+					                \$dfd.reject();
+					            }
+					        });
+					    });
+					},
+					createAction: function (postData, jtParams) {
+					    return $.Deferred(function (\$dfd) {
+					        $.ajax({
+					            url: '${addItemUrl}',
+					            type: 'POST',
+					            dataType: 'json',
+					            data: postData,
+					            success: function (data) {
+									console.log('createAction success: '+data.Record.description);
+					                \$dfd.resolve(data);
+					            },
+					            error: function () {
+									console.log('createAction error');
+					                \$dfd.reject();
+					            }
+					        });
+					    });
+					},
+					updateAction: function (postData, jtParams) {
+					    return $.Deferred(function (\$dfd) {
+					        $.ajax({
+					            url: '${bdDefinitionLoadUrl}',
+					            type: 'PUT',
+					            dataType: 'json',
+					            data: postData,
+					            success: function (data) {
+									console.log('updateAction success');
+					                \$dfd.resolve(data);
+					            },
+					            error: function () {
+									console.log('updateAction error');
+					                \$dfd.reject();
+					            }
+					        });
+					    });
+					},
+					deleteAction: function (postData) {
+						console.log('delete: '+postData);
+					    return $.Deferred(function (\$dfd) {
+					        $.ajax({
+					            url: '${bdDefinitionLoadUrl}',
+					            type: 'DELETE',
+					            dataType: 'json',
+								headers: { 'Accept': 'application/json', 'Content-Type': 'application/x-www-form-urlencoded'},
+					            data: postData,
+					            success: function (data) {
+									console.log('communication success');
+					                \$dfd.resolve(data);
+					            },
+					            error: function () {
+									console.log('communication error');
+					                \$dfd.reject();
+					            }
+					        });
+					    });
+					},
 				},
 				fields: {
 					description: {

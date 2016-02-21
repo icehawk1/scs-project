@@ -21,11 +21,20 @@ public class BlockDiagrammDefinitionResource extends VelocityResource {
 	@GET
 	@Produces(MediaType.TEXT_HTML)
 	public String getHtml() {
-		String bdDefUrl = getUrlOfResource(ItemListResource.class, "loadJsonData");
-		context.put("bdDefinitionLoadUrl", bdDefUrl);
-		context.put("addItemUrl", getUrlOfResource(ItemListResource.class, "addItem"));
+		try {
+			String bdDefUrl = getUrlOfResource(ItemListResource.class, "loadJsonData");
+			String addItemUrl = getUrlOfResource(ItemListResource.class, "addItem");
+			String removeItemUrl = getUrlOfResource(ItemListResource.class, "removeItem");
+			System.out.println("remove url: " + removeItemUrl);
+			context.put("bdDefinitionLoadUrl", bdDefUrl);
+			context.put("addItemUrl", addItemUrl);
+			context.put("removeItemUrl", removeItemUrl);
 
-		String result = mergeVelocityTemplate("JQueryTable.html", context);
-		return result;
+			String result = mergeVelocityTemplate("JQueryTable.html", context);
+			return result;
+		} catch (Throwable ex) {
+			ex.printStackTrace();
+			return "Error: " + ex.getMessage();
+		}
 	}
 }

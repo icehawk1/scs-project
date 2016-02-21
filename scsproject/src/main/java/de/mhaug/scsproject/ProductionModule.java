@@ -32,6 +32,8 @@ public class ProductionModule extends AbstractModule {
 		props.setProperty("file.resource.loader.path", "src/resources/templates");
 		props.setProperty("file.resource.loader.modificationCheckInterval", "5");
 		props.setProperty("runtime.references.strict", "true");
+		props.setProperty("runtime.references.strict.escape", "true");
+		// props.setProperty("runtime.log.invalid.references", "true");
 		result.init(props);
 		return result;
 	}

@@ -67,6 +67,7 @@ public class Main {
 	private void registerResources(final ResourceConfig rc) {
 		rc.register(injector.getInstance(BlockDiagrammDefinitionResource.class));
 		rc.register(injector.getInstance(ItemListResource.class));
+		rc.register(injector.getInstance(ItemResource.class));
 	}
 
 	private void shutdownServer() {
