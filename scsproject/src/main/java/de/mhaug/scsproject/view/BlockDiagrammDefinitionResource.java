@@ -22,11 +22,10 @@ public class BlockDiagrammDefinitionResource extends VelocityResource {
 	@Produces(MediaType.TEXT_HTML)
 	public String getHtml() {
 		String bdDefUrl = getUrlOfResource(ItemListResource.class, "loadJsonData");
-		System.out.println(bdDefUrl);
 		context.put("bdDefinitionLoadUrl", bdDefUrl);
 		context.put("addItemUrl", getUrlOfResource(ItemListResource.class, "addItem"));
 
-		String result = mergeVelocityTemplate("BlockDiagramDefiniton.html", context);
+		String result = mergeVelocityTemplate("JQueryTable.html", context);
 		return result;
 	}
 }

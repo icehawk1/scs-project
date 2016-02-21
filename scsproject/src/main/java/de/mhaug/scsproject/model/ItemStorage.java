@@ -1,5 +1,6 @@
 package de.mhaug.scsproject.model;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -10,6 +11,10 @@ import com.google.inject.Singleton;
 @Singleton
 public class ItemStorage {
 	private final Map<String, FmecaItem> storage = new HashMap<>();
+
+	public ItemStorage() {
+		storage.put("1", new FmecaItem("description 1", new ArrayList<String>()));
+	}
 
 	public void insertItem(FmecaItem item) {
 		storage.put(item.getDescription(), item);
