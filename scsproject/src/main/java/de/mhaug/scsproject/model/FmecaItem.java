@@ -4,22 +4,26 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class FmecaItem {
-	private final String description;
+	private final int id;
+	private String description;
 	private List<String> requiredBy = new ArrayList<>();
 	private String failureMode = "";
 	private Criticality criticality = Criticality.None;
 	private Probability probability = Probability.Remote;
 	private Detection detection = Detection.NoDetectionPossible;
 
-	public FmecaItem(String description, List<String> requiredBy) {
+	public FmecaItem(int id, String description, List<String> requiredBy) {
+		this.id = id;
 		this.requiredBy = requiredBy;
 		assert requiredBy != null;
 		this.description = description;
 		assert description != null;
 	}
 
-	public FmecaItem(String description, List<String> requiredBy, String failureMode, Criticality criticality,
+	public FmecaItem(int id, String description, List<String> requiredBy, String failureMode, Criticality criticality,
 			Probability probability, Detection detection) {
+		this.id = id;
+		assert id >= 0;
 		this.description = description;
 		assert description != null;
 		this.requiredBy = requiredBy;
@@ -32,6 +36,10 @@ public class FmecaItem {
 		assert probability != null;
 		this.detection = detection;
 		assert detection != null;
+	}
+
+	public int getID() {
+		return id;
 	}
 
 	public List<String> getRequiredBy() {

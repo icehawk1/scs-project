@@ -10,14 +10,14 @@ import com.google.inject.Singleton;
 
 @Singleton
 public class ItemStorage {
-	private final Map<String, FmecaItem> internalStorage = new HashMap<>();
+	private final Map<Integer, FmecaItem> internalStorage = new HashMap<>();
 
 	public ItemStorage() {
-		internalStorage.put("1", new FmecaItem("description 1", new ArrayList<String>()));
+		internalStorage.put(1, new FmecaItem(1, "description 1", new ArrayList<String>()));
 	}
 
 	public void insertItem(FmecaItem item) {
-		internalStorage.put(item.getDescription(), item);
+		internalStorage.put(item.getID(), item);
 	}
 
 	public FmecaItem getItem(String descr) {

@@ -54,7 +54,7 @@ public class ItemListResource {
 	public String addItem(@FormParam("description") String description, @FormParam("failureMode") String failureMode) {
 		System.out.println("data: " + description + " " + failureMode);
 
-		FmecaItem toInsert = new FmecaItem(description, new ArrayList<String>());
+		FmecaItem toInsert = new FmecaItem(2, description, new ArrayList<String>());
 		toInsert.setFailureMode(failureMode);
 		storage.insertItem(toInsert);
 

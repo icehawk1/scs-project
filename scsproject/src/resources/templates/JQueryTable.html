@@ -16,6 +16,12 @@
 		jQuery(document).ready(function () {
 			$('#TableContainer').jtable({
 				title: 'Table of people',
+				defaultSorting: 'description DESC',
+				fields: {
+					id: { key: true, title: 'ID', type: 'hidden' },
+					description: { title: 'Item' },
+					failureMode: { title: 'Failure Mode' }
+				},
 				actions: {
 					listAction: function (postData, jtParams) {
 					    return $.Deferred(function (\$dfd) {
@@ -92,14 +98,6 @@
 					        });
 					    });
 					},
-				},
-				fields: {
-					description: {
-						title: 'Item'
-					},
-					failureMode: {
-						title: 'Failure Mode'
-					}
 				}
 			});
 			$('#TableContainer').jtable('load');
