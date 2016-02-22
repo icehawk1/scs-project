@@ -10,29 +10,37 @@ import com.google.inject.Singleton;
 
 @Singleton
 public class ItemStorage {
-	private final Map<String, FmecaItem> storage = new HashMap<>();
+	private final Map<String, FmecaItem> internalStorage = new HashMap<>();
 
 	public ItemStorage() {
-		storage.put("1", new FmecaItem("description 1", new ArrayList<String>()));
+		internalStorage.put("1", new FmecaItem("description 1", new ArrayList<String>()));
 	}
 
 	public void insertItem(FmecaItem item) {
-		storage.put(item.getDescription(), item);
+		internalStorage.put(item.getDescription(), item);
 	}
 
 	public FmecaItem getItem(String descr) {
-		return storage.get(descr);
+		return internalStorage.get(descr);
 	}
 
 	public boolean contains(String description) {
-		return storage.containsKey(description);
+		return internalStorage.containsKey(description);
 	}
 
 	public void removeItem(String description) {
-		storage.remove(description);
+		internalStorage.remove(description);
 	}
 
 	public Collection<FmecaItem> getItems() {
-		return Collections.unmodifiableCollection(storage.values());
+		return Collections.unmodifiableCollection(internalStorage.values());
+	}
+
+	public int size() {
+		return internalStorage.size();
+	}
+
+	public void clear() {
+		internalStorage.clear();
 	}
 }

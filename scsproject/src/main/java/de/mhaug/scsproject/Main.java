@@ -70,7 +70,7 @@ public class Main {
 		rc.register(injector.getInstance(ItemResource.class));
 	}
 
-	private void shutdownServer() {
+	public void shutdownServer() {
 		server.shutdownNow();
 	}
 }
