@@ -16,9 +16,10 @@
 		jQuery(document).ready(function () {
 			$('#TableContainer').jtable({
 				title: 'Table of people',
-				defaultSorting: 'description DESC',
+				defaultSorting: 'description ASC',
+				sorting: true,
 				fields: {
-					id: { key: true, title: 'ID', type: 'hidden' },
+					id: {title: 'ID', key:true },
 					description: { title: 'Item' },
 					failureMode: { title: 'Failure Mode' }
 				},
@@ -45,12 +46,12 @@
 					createAction: function (postData, jtParams) {
 					    return $.Deferred(function (\$dfd) {
 					        $.ajax({
-					            url: '${addItemUrl}',
+					            url: '${addItemUrl}?',
 					            type: 'POST',
 					            dataType: 'json',
 					            data: postData,
 					            success: function (data) {
-									console.log('createAction success: '+data.Record.description);
+									console.log('createAction success: '+data.Record.id);
 					                \$dfd.resolve(data);
 					            },
 					            error: function () {
@@ -68,7 +69,7 @@
 					            dataType: 'json',
 					            data: postData,
 					            success: function (data) {
-									console.log('updateAction success');
+									console.log('updateAction success: ');
 					                \$dfd.resolve(data);
 					            },
 					            error: function () {
@@ -79,7 +80,7 @@
 					    });
 					},
 					deleteAction: function (postData) {
-						console.log('delete: '+postData);
+						console.log('delete: ');
 					    return $.Deferred(function (\$dfd) {
 					        $.ajax({
 					            url: '${bdDefinitionLoadUrl}',

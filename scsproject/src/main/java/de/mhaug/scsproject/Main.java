@@ -1,6 +1,7 @@
 package de.mhaug.scsproject;
 
 import de.mhaug.scsproject.view.BlockDiagrammDefinitionResource;
+import de.mhaug.scsproject.view.FmecaItemEditorResource;
 import de.mhaug.scsproject.view.ItemListResource;
 
 import java.io.IOException;
@@ -68,6 +69,7 @@ public class Main {
 		rc.register(injector.getInstance(BlockDiagrammDefinitionResource.class));
 		rc.register(injector.getInstance(ItemListResource.class));
 		rc.register(injector.getInstance(ItemResource.class));
+		rc.register(injector.getInstance(FmecaItemEditorResource.class));
 	}
 
 	public void shutdownServer() {

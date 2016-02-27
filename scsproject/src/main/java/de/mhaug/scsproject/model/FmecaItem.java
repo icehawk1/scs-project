@@ -5,7 +5,7 @@ import java.util.List;
 
 public class FmecaItem {
 	private final int id;
-	private String description;
+	private String description = "";
 	private List<String> requiredBy = new ArrayList<>();
 	private String failureMode = "";
 	private Criticality criticality = Criticality.None;

@@ -28,7 +28,7 @@ public abstract class VelocityResource {
 	 * Warning: This will not work if this class gets optional dependencies.
 	 */
 	@Inject
-	public void init() {
+	void init() {
 
 	}
 

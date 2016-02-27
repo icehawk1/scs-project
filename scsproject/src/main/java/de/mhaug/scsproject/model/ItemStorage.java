@@ -11,25 +11,31 @@ import com.google.inject.Singleton;
 @Singleton
 public class ItemStorage {
 	private final Map<Integer, FmecaItem> internalStorage = new HashMap<>();
+	private int nextKey = 1;
 
 	public ItemStorage() {
-		internalStorage.put(1, new FmecaItem(1, "description 1", new ArrayList<String>()));
+		this.insertItem(new FmecaItem(nextKey, "description 1", new ArrayList<String>()));
+	}
+
+	public int getAvailableKey() {
+		return nextKey;
 	}
 
 	public void insertItem(FmecaItem item) {
-		internalStorage.put(item.getID(), item);
+		internalStorage.put(getAvailableKey(), item);
+		nextKey++;
 	}
 
-	public FmecaItem getItem(String descr) {
-		return internalStorage.get(descr);
+	public FmecaItem getItem(int id) {
+		return internalStorage.get(id);
 	}
 
-	public boolean contains(String description) {
-		return internalStorage.containsKey(description);
+	public boolean contains(int id) {
+		return internalStorage.containsKey(id);
 	}
 
-	public void removeItem(String description) {
-		internalStorage.remove(description);
+	public void removeItem(int id) {
+		internalStorage.remove(id);
 	}
 
 	public Collection<FmecaItem> getItems() {
@@ -42,5 +48,6 @@ public class ItemStorage {
 
 	public void clear() {
 		internalStorage.clear();
+		nextKey = 1;
 	}
 }

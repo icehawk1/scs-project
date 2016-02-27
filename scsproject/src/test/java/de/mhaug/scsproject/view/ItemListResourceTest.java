@@ -43,14 +43,14 @@ public class ItemListResourceTest extends AbstractTest {
 
 	@Test
 	public void testUpdateItem() {
-		String actual = instance.updateItem(description);
+		String actual = instance.updateItem("3", description, "blub");
 		assertTrue(actual.contains("\"Result\":\"OK\""));
 		assertEquals(1, storage.size());
 	}
 
 	@Test
 	public void testRemoveItem() {
-		String actual = instance.removeItem(description);
+		String actual = instance.removeItem("3");
 		assertTrue(actual.contains("\"Result\":\"OK\""));
 		assertEquals(0, storage.size());
 	}

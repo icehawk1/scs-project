@@ -54,7 +54,7 @@ public class ItemListResource {
 	public String addItem(@FormParam("description") String description, @FormParam("failureMode") String failureMode) {
 		System.out.println("data: " + description + " " + failureMode);
 
-		FmecaItem toInsert = new FmecaItem(2, description, new ArrayList<String>());
+		FmecaItem toInsert = new FmecaItem(storage.getAvailableKey(), description, new ArrayList<String>());
 		toInsert.setFailureMode(failureMode);
 		storage.insertItem(toInsert);
 
@@ -64,16 +64,17 @@ public class ItemListResource {
 	@PUT
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
 	@Produces(MediaType.APPLICATION_JSON)
-	public String updateItem(@FormParam("description") String item) {
-		System.out.println("itemListResource update: " + item);
+	public String updateItem(@FormParam("id") String id, @FormParam("description") String description,
+			@FormParam("failureMode") String failureMode) {
+		System.out.println("itemListResource update: " + id);
 		return "{\"Result\":\"OK\"}";
 	}
 
 	@DELETE
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
 	@Produces(MediaType.APPLICATION_JSON)
-	public String removeItem(@FormParam("description") String item) {
-		System.out.println("itemListResource delete: " + item);
+	public String removeItem(@FormParam("id") String id) {
+		System.out.println("itemListResource delete: " + id);
 		return "{\"Result\":\"OK\"}";
 	}
 }
