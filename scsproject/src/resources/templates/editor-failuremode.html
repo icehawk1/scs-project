@@ -1,0 +1,24 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+		<meta http-equiv="Content-Type" content="text/html; charset=${charset}" />
+		<link href="/staticfiles/editor.css" rel="stylesheet" type="text/css" />
+		<title>Editing item ${itemid}</title>
+	</head>
+	<body id="body">
+
+		<p><h1>Failure mode</h1>
+			Please describe all possible ways you can think of that this component could fail.
+			Please do not just list usual failures but everything that could possibly go wrong.
+			Be creative.
+			<form action="/ItemList/${itemid}/${field}" id="form" method="POST" >
+				<label id="label_${field}" for="input_${field}">Please describe failure mode</label>
+				<textarea id="input_${field}" required autofocus cols="80" rows="10" name="${field}"
+					minlength="${minlength}" maxlength="${maxlength}">$!{item.getFailureMode()}</textarea>
+				<button id="reset" type="reset" value="Reset">Reset</button>
+				<button id="submit" type="submit">Submit</button>
+			</form>
+
+			#parse( "currentinput.html" )
+	</body>
+</html>

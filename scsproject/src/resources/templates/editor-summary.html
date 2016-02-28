@@ -1,0 +1,18 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+		<meta http-equiv="Content-Type" content="text/html; charset=${charset}" />
+		<link href="/staticfiles/editor.css" rel="stylesheet" type="text/css" />
+		<title>Editing item ${itemid}</title>
+	</head>
+	<body id="body">
+
+		<p><h1>Summary</h1>
+
+			<p><h2>Risk priority Number</h2>
+				<strong>The risk priority number of this component is:</strong> $!{item.getRiskPriorityNumber()}
+			<p> The higher this number the more pressing the risk is. Please mitigate the highest risks first.
+
+#parse( "currentinput.html" )
+	</body>
+</html>

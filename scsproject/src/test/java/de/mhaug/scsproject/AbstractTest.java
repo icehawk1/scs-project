@@ -24,6 +24,8 @@ public abstract class AbstractTest {
 		props.setProperty("file.resource.loader.path", "src/test/resources");
 		props.setProperty("file.resource.loader.modificationCheckInterval", "10");
 		Velocity.init(props);
+
+		assert Main.debug_mode == true : "Tests should be executed in debug mode";
 	}
 
 	public Injector getInjector() {

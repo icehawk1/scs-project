@@ -3,27 +3,35 @@ package de.mhaug.scsproject.model;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * A java bean that contains the data that the user has entered for a particular
+ * component and its dependencies. It also contains a method for calculation the
+ * risk priority number for this component as defined by FMECA.
+ * 
+ * @author Martin Haug
+ */
 public class FmecaItem {
-	private final int id;
 	private String description = "";
 	private List<String> requiredBy = new ArrayList<>();
 	private String failureMode = "";
+	private String consequences = "";
 	private Criticality criticality = Criticality.None;
 	private Probability probability = Probability.Remote;
 	private Detection detection = Detection.NoDetectionPossible;
+	private String mitigations = "";
+	private String mitigations2;
 
-	public FmecaItem(int id, String description, List<String> requiredBy) {
-		this.id = id;
+	public FmecaItem(String description, List<String> requiredBy) {
 		this.requiredBy = requiredBy;
 		assert requiredBy != null;
 		this.description = description;
 		assert description != null;
 	}
 
-	public FmecaItem(int id, String description, List<String> requiredBy, String failureMode, Criticality criticality,
-			Probability probability, Detection detection) {
-		this.id = id;
-		assert id >= 0;
+	public FmecaItem(String description, List<String> requiredBy, String failureMode, String consequences,
+			Criticality criticality, Probability probability, Detection detection, String mitigations) {
+		this.consequences = consequences;
+		assert consequences != null;
 		this.description = description;
 		assert description != null;
 		this.requiredBy = requiredBy;
@@ -36,10 +44,13 @@ public class FmecaItem {
 		assert probability != null;
 		this.detection = detection;
 		assert detection != null;
+		this.mitigations = mitigations;
+		assert mitigations != null;
 	}
 
-	public int getID() {
-		return id;
+	public int getRiskPriorityNumber() {
+		int result = criticality.getNumber() * probability.getNumber() * detection.getNumber();
+		return result;
 	}
 
 	public List<String> getRequiredBy() {
@@ -56,6 +67,14 @@ public class FmecaItem {
 
 	public void setFailureMode(String failureMode) {
 		this.failureMode = failureMode;
+	}
+
+	public String getConsequences() {
+		return consequences;
+	}
+
+	public void setConsequences(String consequences) {
+		this.consequences = consequences;
 	}
 
 	public Criticality getCriticality() {
@@ -91,6 +110,14 @@ public class FmecaItem {
 		return "FmecaItem [description=" + description + "]";
 	}
 
+	public String getMitigations() {
+		return mitigations;
+	}
+
+	public void setMitigations(String mitigations) {
+		this.mitigations = mitigations;
+	}
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -100,7 +127,14 @@ public class FmecaItem {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
+		result = prime * result + ((consequences == null) ? 0 : consequences.hashCode());
+		result = prime * result + ((criticality == null) ? 0 : criticality.hashCode());
 		result = prime * result + ((description == null) ? 0 : description.hashCode());
+		result = prime * result + ((detection == null) ? 0 : detection.hashCode());
+		result = prime * result + ((failureMode == null) ? 0 : failureMode.hashCode());
+		result = prime * result + ((mitigations == null) ? 0 : mitigations.hashCode());
+		result = prime * result + ((probability == null) ? 0 : probability.hashCode());
+		result = prime * result + ((requiredBy == null) ? 0 : requiredBy.hashCode());
 		return result;
 	}
 
@@ -118,11 +152,38 @@ public class FmecaItem {
 		if (getClass() != obj.getClass())
 			return false;
 		FmecaItem other = (FmecaItem) obj;
+		if (consequences == null) {
+			if (other.consequences != null)
+				return false;
+		} else if (!consequences.equals(other.consequences))
+			return false;
+		if (criticality != other.criticality)
+			return false;
 		if (description == null) {
 			if (other.description != null)
 				return false;
 		} else if (!description.equals(other.description))
 			return false;
+		if (detection != other.detection)
+			return false;
+		if (failureMode == null) {
+			if (other.failureMode != null)
+				return false;
+		} else if (!failureMode.equals(other.failureMode))
+			return false;
+		if (mitigations == null) {
+			if (other.mitigations != null)
+				return false;
+		} else if (!mitigations.equals(other.mitigations))
+			return false;
+		if (probability != other.probability)
+			return false;
+		if (requiredBy == null) {
+			if (other.requiredBy != null)
+				return false;
+		} else if (!requiredBy.equals(other.requiredBy))
+			return false;
 		return true;
 	}
+
 }

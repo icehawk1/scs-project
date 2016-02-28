@@ -1,0 +1,40 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+		<meta http-equiv="Content-Type" content="text/html; charset=${charset}" />
+		<link href="/staticfiles/editor.css" rel="stylesheet" type="text/css" />
+		<title>Editing item ${itemid}</title>
+	</head>
+	<body id="body">
+
+		<p><h1>Criticality, Probability and Detection</h1>
+			Please rate how critical a failure of this component would be, how likely it is to occur
+			and how likely it is that it would be detected before an accident happens.
+			<form action="/ItemList/${itemid}/${field}" id="form" method="POST" >
+				<label id="label_input" for="input">${field} of the component</label>
+				 <select id="input" name="${field}">
+				 #foreach($crit in $criticality_values)
+					 <option>${crit.toString()}</option>
+				 #end
+				 </select>
+
+				 <label id="label_input" for="input">Likelyhood of occurence</label>
+ 				 <select id="input" name="probability">
+ 				 #foreach($crit in $probability_values)
+ 					 <option>${crit.toString()}</option>
+ 				 #end
+ 				 </select>
+
+				 <label id="label_input" for="input">Likelyhood of detection</label>
+				  <select id="input" name="detection">
+				  #foreach($crit in $detection_values)
+					  <option>${crit.toString()}</option>
+				  #end
+				  </select>
+
+				<button id="submit" type="submit">Submit</button>
+			</form>
+
+#parse( "currentinput.html" )
+	</body>
+</html>

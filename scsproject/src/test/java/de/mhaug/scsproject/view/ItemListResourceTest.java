@@ -23,7 +23,7 @@ public class ItemListResourceTest extends AbstractTest {
 		this.instance = getInjector().getInstance(ItemListResource.class);
 		this.storage = getInjector().getInstance(ItemStorage.class);
 		storage.clear();
-		storage.insertItem(new FmecaItem(2, description, new ArrayList<String>()));
+		storage.insertItem(new FmecaItem(description, new ArrayList<String>()));
 	}
 
 	@Test
@@ -43,14 +43,14 @@ public class ItemListResourceTest extends AbstractTest {
 
 	@Test
 	public void testUpdateItem() {
-		String actual = instance.updateItem("3", description, "blub");
+		String actual = instance.updateItem("" + (storage.getAvailableKey() - 1), description, "blub");
 		assertTrue(actual.contains("\"Result\":\"OK\""));
 		assertEquals(1, storage.size());
 	}
 
 	@Test
 	public void testRemoveItem() {
-		String actual = instance.removeItem("3");
+		String actual = instance.removeItem("" + (storage.getAvailableKey() - 1));
 		assertTrue(actual.contains("\"Result\":\"OK\""));
 		assertEquals(0, storage.size());
 	}

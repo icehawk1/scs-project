@@ -24,6 +24,10 @@ public class Main {
 	public static final String BASE_URI = "http://localhost:8080/";
 	private static Injector injector;
 	private HttpServer server;
+	/**
+	 * Defines if this application should be executed in debug mode.
+	 */
+	public static final boolean debug_mode = true;
 
 	/**
 	 * Main method.

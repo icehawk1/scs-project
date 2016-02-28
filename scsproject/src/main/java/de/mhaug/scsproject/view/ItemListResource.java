@@ -54,7 +54,7 @@ public class ItemListResource {
 	public String addItem(@FormParam("description") String description, @FormParam("failureMode") String failureMode) {
 		System.out.println("data: " + description + " " + failureMode);
 
-		FmecaItem toInsert = new FmecaItem(storage.getAvailableKey(), description, new ArrayList<String>());
+		FmecaItem toInsert = new FmecaItem(description, new ArrayList<String>());
 		toInsert.setFailureMode(failureMode);
 		storage.insertItem(toInsert);
 
@@ -75,6 +75,7 @@ public class ItemListResource {
 	@Produces(MediaType.APPLICATION_JSON)
 	public String removeItem(@FormParam("id") String id) {
 		System.out.println("itemListResource delete: " + id);
+		storage.removeItem(Integer.parseInt(id));
 		return "{\"Result\":\"OK\"}";
 	}
 }

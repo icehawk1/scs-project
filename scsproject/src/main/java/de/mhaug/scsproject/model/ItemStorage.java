@@ -1,5 +1,7 @@
 package de.mhaug.scsproject.model;
 
+import de.mhaug.scsproject.Main;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -14,7 +16,9 @@ public class ItemStorage {
 	private int nextKey = 1;
 
 	public ItemStorage() {
-		this.insertItem(new FmecaItem(nextKey, "description 1", new ArrayList<String>()));
+		if (Main.debug_mode) {
+			this.insertItem(new FmecaItem("description 1", new ArrayList<String>()));
+		}
 	}
 
 	public int getAvailableKey() {
