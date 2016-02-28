@@ -1,81 +1,43 @@
 package de.mhaug.scsproject.view;
 
-import de.mhaug.scsproject.model.FmecaItem;
 import de.mhaug.scsproject.model.ItemStorage;
 
-import java.util.ArrayList;
-import java.util.Collection;
-
-import javax.ws.rs.Consumes;
-import javax.ws.rs.DELETE;
-import javax.ws.rs.FormParam;
+import javax.inject.Singleton;
 import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
-import com.google.gson.Gson;
 import com.google.inject.Inject;
 
+/**
+ * Displays the list currently known components/items. All Resources are
+ * singletons because only one instance will be registered with JAX-RS.
+ * 
+ * @author Martin Haug
+ */
+@Singleton
 @Path("/ItemList")
-public class ItemListResource {
-	private Gson gson;
+public class ItemListResource extends VelocityResource {
 	private ItemStorage storage;
 
 	@Inject
-	public ItemListResource(ItemStorage storage, Gson gson) {
+	public ItemListResource(ItemStorage storage) {
 		this.storage = storage;
-		this.gson = gson;
 	}
 
-	/**
-	 * Loads the list of Items currently in the data store.
-	 * 
-	 * @return The data in JSON format
-	 */
 	@GET
-	@Produces(MediaType.APPLICATION_JSON)
-	public String loadJsonData() {
-		Collection<FmecaItem> data = storage.getItems();
-		String result = gson.toJson(data);
+	@Produces(MediaType.TEXT_HTML)
+	public String sendGetHtml() {
+		try {
 
-		if (result != null) {
-			return "{ \"Result\":\"OK\", \"Records\":" + result + " }";
-		} else {
-			return "{\"Result\":\"ERROR\", \"Message\":\"data is null\"}";
+			context.put("storage", storage);
+			String result = mergeVelocityTemplate("ItemList.html", context);
+			return result;
+
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			throw ex;
 		}
-	}
-
-	@POST
-	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-	@Produces(MediaType.APPLICATION_JSON)
-	public String addItem(@FormParam("description") String description, @FormParam("failureMode") String failureMode) {
-		System.out.println("data: " + description + " " + failureMode);
-
-		FmecaItem toInsert = new FmecaItem(description, new ArrayList<String>());
-		toInsert.setFailureMode(failureMode);
-		storage.insertItem(toInsert);
-
-		return "{ \"Result\":\"OK\", \"Record\":" + gson.toJson(toInsert) + " }";
-	}
-
-	@PUT
-	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-	@Produces(MediaType.APPLICATION_JSON)
-	public String updateItem(@FormParam("id") String id, @FormParam("description") String description,
-			@FormParam("failureMode") String failureMode) {
-		System.out.println("itemListResource update: " + id);
-		return "{\"Result\":\"OK\"}";
-	}
-
-	@DELETE
-	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-	@Produces(MediaType.APPLICATION_JSON)
-	public String removeItem(@FormParam("id") String id) {
-		System.out.println("itemListResource delete: " + id);
-		storage.removeItem(Integer.parseInt(id));
-		return "{\"Result\":\"OK\"}";
 	}
 }

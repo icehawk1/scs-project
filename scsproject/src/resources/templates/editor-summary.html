@@ -12,6 +12,10 @@
 			<p><h2>Risk priority Number</h2>
 				<strong>The risk priority number of this component is:</strong> $!{item.getRiskPriorityNumber()}
 			<p> The higher this number the more pressing the risk is. Please mitigate the highest risks first.
+			<p>	<form action="/ItemList/${itemid}/${field}" id="form" method="POST" >
+					<button id="submit" type="submit">OK</button>
+				</form>
+
 
 #parse( "currentinput.html" )
 	</body>

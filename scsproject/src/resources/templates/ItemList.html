@@ -1,0 +1,25 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+		<meta http-equiv="Content-Type" content="text/html; charset=${charset}" />
+		<link href="/staticfiles/editor.css" rel="stylesheet" type="text/css" />
+		<title></title>
+	</head>
+	<body id="body">
+
+		<p>
+			<table>
+				<tr> <th>Item name</th> <th>Description</th> <th>Links</th> </tr>
+#foreach( $item in $storage.getItems() )
+				<tr>
+					<td>${item.getName()}</td> <td>${item.getDescription()}</td>
+					<td><a href="/ItemList/${item.getId()}">Edit</a>
+						<a href="/ItemHelper/remove?id=${item.getId()}">Delete</a>
+					</td>
+				</tr>
+#end
+			</table>
+
+		<p><a href="/ItemHelper/new">Create new component</a>
+	</body>
+</html>

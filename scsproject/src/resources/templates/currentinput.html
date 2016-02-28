@@ -1,0 +1,16 @@
+<p><br>
+	<h2>Current input</h2>
+	<h3>Potential failure modes</h3>
+	You described the following ways this component could potentially fail:
+<p> <textarea readonly cols="80" rows="5">$!{item.getFailureMode()}</textarea>
+
+<p>	<h3>Potential consequences of a failure</h3>
+	You described the following consequences a failure could have:
+<p> <textarea readonly cols="80" rows="5">$!{item.getConsequences()}</textarea>
+
+<p>	<h3>Criticality, Probability and Detection</h3>
+	You assume that a failure of this component will have <emph>$!{item.getCriticality()}</emph> consequences, this has a <emph>$!{item.getProbability()}</emph> probability that it will happen and there is a <emph>$!{item.getDetection()}</emph> that it will be detected before an accident occurs.
+
+<p>	<h3>Potential mitigations</h3>
+	You described the following ways a failure could be mitigated:
+<p> <textarea readonly cols="80" rows="5">$!{item.getMitigations()}</textarea>

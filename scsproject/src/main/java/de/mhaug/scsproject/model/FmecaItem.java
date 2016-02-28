@@ -1,41 +1,46 @@
 package de.mhaug.scsproject.model;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * A java bean that contains the data that the user has entered for a particular
  * component and its dependencies. It also contains a method for calculation the
- * risk priority number for this component as defined by FMECA.
+ * risk priority number for this component as defined by FMECA.This class
+ * implements comparable so the {@link ItemStorage} can be sorted by risk
+ * priority number.
  * 
  * @author Martin Haug
  */
-public class FmecaItem {
+public class FmecaItem implements Comparable<FmecaItem> {
+	private final int id;
+	private String name = "";
 	private String description = "";
-	private List<String> requiredBy = new ArrayList<>();
 	private String failureMode = "";
 	private String consequences = "";
 	private Criticality criticality = Criticality.None;
 	private Probability probability = Probability.Remote;
 	private Detection detection = Detection.NoDetectionPossible;
 	private String mitigations = "";
-	private String mitigations2;
 
-	public FmecaItem(String description, List<String> requiredBy) {
-		this.requiredBy = requiredBy;
-		assert requiredBy != null;
-		this.description = description;
-		assert description != null;
+	public FmecaItem(int id) {
+		this.id = id;
+		assert id > 0;
 	}
 
-	public FmecaItem(String description, List<String> requiredBy, String failureMode, String consequences,
-			Criticality criticality, Probability probability, Detection detection, String mitigations) {
+	public FmecaItem(int id, String name, String description) {
+		this.id = id;
+		this.setName(name);
+		this.description = description;
+		assert description != null;
+		assert name != null;
+	}
+
+	public FmecaItem(int id, String description, String failureMode, String consequences, Criticality criticality,
+			Probability probability, Detection detection, String mitigations) {
+		this.id = id;
+		assert id > 0;
 		this.consequences = consequences;
 		assert consequences != null;
 		this.description = description;
 		assert description != null;
-		this.requiredBy = requiredBy;
-		assert requiredBy != null;
 		this.failureMode = failureMode;
 		assert failureMode != null;
 		this.criticality = criticality;
@@ -48,17 +53,13 @@ public class FmecaItem {
 		assert mitigations != null;
 	}
 
+	public int getId() {
+		return id;
+	}
+
 	public int getRiskPriorityNumber() {
 		int result = criticality.getNumber() * probability.getNumber() * detection.getNumber();
 		return result;
-	}
-
-	public List<String> getRequiredBy() {
-		return requiredBy;
-	}
-
-	public void setRequiredBy(List<String> requiredBy) {
-		this.requiredBy = requiredBy;
 	}
 
 	public String getFailureMode() {
@@ -105,17 +106,30 @@ public class FmecaItem {
 		return description;
 	}
 
-	@Override
-	public String toString() {
-		return "FmecaItem [description=" + description + "]";
-	}
-
 	public String getMitigations() {
 		return mitigations;
 	}
 
 	public void setMitigations(String mitigations) {
 		this.mitigations = mitigations;
+	}
+
+	@Override
+	public String toString() {
+		return "FmecaItem [name=" + getName() + "]";
+	}
+
+	/**
+	 * Compares by risk priority number
+	 */
+	@Override
+	public int compareTo(FmecaItem other) {
+		if (this.getRiskPriorityNumber() > other.getRiskPriorityNumber())
+			return 1;
+		else if (this.getRiskPriorityNumber() == other.getRiskPriorityNumber())
+			return 0;
+		else
+			return -1;
 	}
 
 	/*
@@ -133,8 +147,8 @@ public class FmecaItem {
 		result = prime * result + ((detection == null) ? 0 : detection.hashCode());
 		result = prime * result + ((failureMode == null) ? 0 : failureMode.hashCode());
 		result = prime * result + ((mitigations == null) ? 0 : mitigations.hashCode());
+		result = prime * result + ((getName() == null) ? 0 : getName().hashCode());
 		result = prime * result + ((probability == null) ? 0 : probability.hashCode());
-		result = prime * result + ((requiredBy == null) ? 0 : requiredBy.hashCode());
 		return result;
 	}
 
@@ -176,14 +190,22 @@ public class FmecaItem {
 				return false;
 		} else if (!mitigations.equals(other.mitigations))
 			return false;
+		if (getName() == null) {
+			if (other.getName() != null)
+				return false;
+		} else if (!getName().equals(other.getName()))
+			return false;
 		if (probability != other.probability)
 			return false;
-		if (requiredBy == null) {
-			if (other.requiredBy != null)
-				return false;
-		} else if (!requiredBy.equals(other.requiredBy))
-			return false;
 		return true;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
 	}
 
 }

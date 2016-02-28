@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
@@ -31,8 +32,12 @@ import javax.ws.rs.core.Response;
  * A series of GET and POST requests with redirects inbetween was chosen so that
  * the browser back button still works.
  * 
+ * All Resources are singletons because only one instance will be registered
+ * with JAX-RS.
+ * 
  * @author Martin Haug
  */
+@Singleton
 @Path("/ItemList/{item}")
 public class FmecaItemEditorResource extends VelocityResource {
 	private ItemStorage storage;
@@ -73,7 +78,7 @@ public class FmecaItemEditorResource extends VelocityResource {
 	 */
 	@GET
 	@Produces(MediaType.TEXT_HTML)
-	public Response sendGetHtmlDefault(@PathParam("item") String item) throws URISyntaxException {
+	public Response sendGetHtmlDefault(@PathParam("item") int item) throws URISyntaxException {
 		return Response.seeOther(new URI("/ItemList/" + item + "/get-failuremode")).build();
 	}
 
@@ -88,16 +93,15 @@ public class FmecaItemEditorResource extends VelocityResource {
 	@GET
 	@Path("get-{field}")
 	@Produces(MediaType.TEXT_HTML)
-	public String sendGetHtmlField(@PathParam("item") String item, @PathParam("field") String field) {
+	public String sendGetHtmlField(@PathParam("item") int itemid, @PathParam("field") String field) {
 		try {
-			int id = Integer.parseInt(item);
-			if (!storage.contains(id)) {
+			if (!storage.contains(itemid)) {
 				throw new NotFoundException();
 			}
 
-			FmecaItem fmecaitem = storage.getItem(id);
+			FmecaItem fmecaitem = storage.getItem(itemid);
 			context.put("item", fmecaitem);
-			context.put("itemid", id);
+			context.put("itemid", itemid);
 			context.put("field", field);
 			context.put("minlength", 20);
 			context.put("maxlength", 500);
@@ -117,17 +121,16 @@ public class FmecaItemEditorResource extends VelocityResource {
 	@Path("failuremode")
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
 	@Produces(MediaType.TEXT_HTML)
-	public Response retrieveFailureMode(@PathParam("item") String item, @FormParam("failuremode") String failuremode)
+	public Response retrieveFailureMode(@PathParam("item") int itemid, @FormParam("failuremode") String failuremode)
 			throws Exception {
 		try {
 
 			// Store the stuff that the user has typed in the form
 			// and then redirect him to the next step
-			int id = Integer.parseInt(item);
-			if (storage.contains(id)) {
-				URI nextPage = new URI("/ItemList/" + item + "/get-consequences");
+			if (storage.contains(itemid)) {
+				URI nextPage = new URI("/ItemList/" + itemid + "/get-consequences");
 				System.out.println("set failure mode: " + failuremode);
-				storage.getItem(id).setFailureMode(failuremode);
+				storage.getItem(itemid).setFailureMode(failuremode);
 				return Response.seeOther(nextPage).build();
 			} else {
 				throw new NotFoundException();
@@ -146,17 +149,16 @@ public class FmecaItemEditorResource extends VelocityResource {
 	@Path("consequences")
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
 	@Produces(MediaType.TEXT_HTML)
-	public Response retrieveConsequences(@PathParam("item") String item, @FormParam("consequences") String consequences)
+	public Response retrieveConsequences(@PathParam("item") int itemid, @FormParam("consequences") String consequences)
 			throws Exception {
 		try {
 
 			// Store the stuff that the user has typed in the form
 			// and then redirect him to the next step
-			int id = Integer.parseInt(item);
-			if (storage.contains(id)) {
-				URI nextPage = new URI("/ItemList/" + item + "/get-criticality");
+			if (storage.contains(itemid)) {
+				URI nextPage = new URI("/ItemList/" + itemid + "/get-criticality");
 				System.out.println("set consequences: " + consequences);
-				storage.getItem(id).setConsequences(consequences);
+				storage.getItem(itemid).setConsequences(consequences);
 				return Response.seeOther(nextPage).build();
 			} else {
 				throw new NotFoundException();
@@ -180,28 +182,27 @@ public class FmecaItemEditorResource extends VelocityResource {
 	@Path("criticality")
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
 	@Produces(MediaType.TEXT_HTML)
-	public Response retrieveCriticality(@PathParam("item") String item, @FormParam("criticality") String criticality,
+	public Response retrieveCriticality(@PathParam("item") int itemid, @FormParam("criticality") String criticality,
 			@FormParam("probability") String probability, @FormParam("detection") String detection) throws Exception {
 		try {
 
 			// Store the stuff that the user has typed in the form
 			// and then redirect him to the next step
-			int id = Integer.parseInt(item);
-			if (storage.contains(id)) {
-				URI nextPage = new URI("/ItemList/" + item + "/get-mitigations");
+			if (storage.contains(itemid)) {
+				URI nextPage = new URI("/ItemList/" + itemid + "/get-mitigations");
 
 				if (criticality != null && !criticality.isEmpty())
-					storage.getItem(id).setCriticality(Criticality.valueOf(criticality));
+					storage.getItem(itemid).setCriticality(Criticality.valueOf(criticality));
 				else
 					System.err.println("Invalid criticality:" + criticality);
 
 				if (probability != null && !probability.isEmpty())
-					storage.getItem(id).setProbability(Probability.valueOf(probability));
+					storage.getItem(itemid).setProbability(Probability.valueOf(probability));
 				else
 					System.err.println("Invalid probability: " + probability);
 
 				if (detection != null && !detection.isEmpty())
-					storage.getItem(id).setDetection(Detection.valueOf(detection));
+					storage.getItem(itemid).setDetection(Detection.valueOf(detection));
 				else
 					System.out.println("Invalid detection: " + detection);
 
@@ -225,17 +226,16 @@ public class FmecaItemEditorResource extends VelocityResource {
 	@Path("mitigations")
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
 	@Produces(MediaType.TEXT_HTML)
-	public Response sendPostHtmlMitigations(@PathParam("item") String item,
-			@FormParam("mitigations") String mitigations) throws Exception {
+	public Response sendPostHtmlMitigations(@PathParam("item") int itemid, @FormParam("mitigations") String mitigations)
+			throws Exception {
 		try {
 
 			// Store the stuff that the user has typed in the form
 			// and then redirect him to the next step
-			int id = Integer.parseInt(item);
-			if (storage.contains(id)) {
-				URI nextPage = new URI("/ItemList/" + item + "/get-summary");
+			if (storage.contains(itemid)) {
+				URI nextPage = new URI("/ItemList/" + itemid + "/get-summary");
 				System.out.println("set mitigations: " + mitigations);
-				storage.getItem(id).setMitigations(mitigations);
+				storage.getItem(itemid).setMitigations(mitigations);
 				return Response.seeOther(nextPage).build();
 			} else {
 				throw new NotFoundException();
@@ -255,7 +255,7 @@ public class FmecaItemEditorResource extends VelocityResource {
 	@Path("summary")
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
 	@Produces(MediaType.TEXT_HTML)
-	public Response sendPostHtmlSummary(@PathParam("item") String item) throws Exception {
+	public Response sendPostHtmlSummary(@PathParam("item") int itemid) throws Exception {
 		try {
 			URI nextPage = new URI("/ItemList/");
 			return Response.seeOther(nextPage).build();

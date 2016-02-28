@@ -2,6 +2,7 @@ package de.mhaug.scsproject;
 
 import de.mhaug.scsproject.view.BlockDiagrammDefinitionResource;
 import de.mhaug.scsproject.view.FmecaItemEditorResource;
+import de.mhaug.scsproject.view.ItemHelperResource;
 import de.mhaug.scsproject.view.ItemListResource;
 
 import java.io.IOException;
@@ -17,13 +18,18 @@ import com.google.inject.Guice;
 import com.google.inject.Injector;
 
 /**
- * Main class.
+ * Main class, starts the HTTP server, runs it and shuts it down.
  */
 public class Main {
-	// Base URI the Grizzly HTTP server will listen on
+	/** Base URI the Grizzly HTTP server will listen on */
 	public static final String BASE_URI = "http://localhost:8080/";
+	/**
+	 * The injector which is used instead of the new operator because we are
+	 * doing Dependency Injection
+	 */
 	private static Injector injector;
 	private HttpServer server;
+
 	/**
 	 * Defines if this application should be executed in debug mode.
 	 */
@@ -69,11 +75,16 @@ public class Main {
 				"/staticfiles");
 	}
 
+	/**
+	 * We need to manually register our Resources with JAX-RS because if JAX-RS
+	 * does it itself, it will not use Dependency Injection and then the
+	 * Resources do not get the necessary parameters.
+	 */
 	private void registerResources(final ResourceConfig rc) {
 		rc.register(injector.getInstance(BlockDiagrammDefinitionResource.class));
 		rc.register(injector.getInstance(ItemListResource.class));
-		rc.register(injector.getInstance(ItemResource.class));
 		rc.register(injector.getInstance(FmecaItemEditorResource.class));
+		rc.register(injector.getInstance(ItemHelperResource.class));
 	}
 
 	public void shutdownServer() {
