@@ -1,6 +1,5 @@
 package de.mhaug.scsproject;
 
-import de.mhaug.scsproject.view.BlockDiagrammDefinitionResource;
 import de.mhaug.scsproject.view.FmecaItemEditorResource;
 import de.mhaug.scsproject.view.ItemHelperResource;
 import de.mhaug.scsproject.view.ItemListResource;
@@ -81,7 +80,6 @@ public class Main {
 	 * Resources do not get the necessary parameters.
 	 */
 	private void registerResources(final ResourceConfig rc) {
-		rc.register(injector.getInstance(BlockDiagrammDefinitionResource.class));
 		rc.register(injector.getInstance(ItemListResource.class));
 		rc.register(injector.getInstance(FmecaItemEditorResource.class));
 		rc.register(injector.getInstance(ItemHelperResource.class));

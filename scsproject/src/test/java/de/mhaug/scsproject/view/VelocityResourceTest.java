@@ -18,8 +18,8 @@ public class VelocityResourceTest extends AbstractTest {
 
 	@Test
 	public void testGetUrlOfResource() {
-		String expected = "/BlockDiagramDefinition";
-		String actual = instance.getUrlOfResource(BlockDiagrammDefinitionResource.class, "dataLoadUrl");
+		String expected = "/ItemList";
+		String actual = instance.getUrlOfResource(ItemListResource.class, "dataLoadUrl");
 		assertEquals(expected, actual);
 	}
 }

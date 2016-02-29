@@ -2,11 +2,18 @@ package de.mhaug.scsproject.model;
 
 import de.mhaug.scsproject.Main;
 
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
 /**
@@ -21,10 +28,17 @@ import com.google.inject.Singleton;
 @Singleton
 public class ItemStorage {
 	/** Use a TreeMap so its always sorted */
-	private final SortedMap<Integer, FmecaItem> internalStorage = new TreeMap<>();
+	private SortedMap<Integer, FmecaItem> internalStorage = new TreeMap<>();
 	private int nextKey = 1;
+	private Gson gson;
+	private static final File savedir = new File(System.getProperty("user.home"), ".scsstorage");
 
-	public ItemStorage() {
+	@Inject
+	public ItemStorage(Gson gson) {
+		this.gson = gson;
+		if (!savedir.exists())
+			savedir.mkdirs();
+
 		if (Main.debug_mode) {
 			this.insertItem(new FmecaItem(1, "name 1", "description 1"));
 			this.insertItem(new FmecaItem(2, "name 2", "description 2"));
@@ -94,5 +108,36 @@ public class ItemStorage {
 	public void clear() {
 		internalStorage.clear();
 		nextKey = 1;
+	}
+
+	public void save(String filename) throws IOException {
+		File savefile = new File(savedir, filename);
+		if (!savefile.exists())
+			savefile.createNewFile();
+
+		FileWriter filewriter = new FileWriter(savefile);
+		gson.toJson(internalStorage, filewriter);
+
+		filewriter.flush();
+		filewriter.close();
+	}
+
+	public void load(String filename) throws IOException {
+		clear();
+
+		FileReader filereader = new FileReader(new File(savedir, filename));
+		assert internalStorage != null;
+
+		internalStorage = gson.fromJson(filereader, new TypeToken<TreeMap<Integer, FmecaItem>>() {
+		}.getType());
+
+		assert internalStorage != null;
+
+		filereader.close();
+	}
+
+	@Override
+	public String toString() {
+		return "storage: " + internalStorage.toString();
 	}
 }

@@ -3,12 +3,15 @@
     <head>
 		<meta http-equiv="Content-Type" content="text/html; charset=${charset}" />
 		<link href="/staticfiles/editor.css" rel="stylesheet" type="text/css" />
-		<title></title>
+		<link rel="stylesheet" href="${webix-cssfile}" type="text/css" charset="${charset}">
+		<script src="${webix-jsfile}" type="application/javascript" charset="${charset}" ></script>
+
+		<title>List of defined components</title>
 	</head>
 	<body id="body">
 
-		<p>
-			<table>
+		<p><div id="tablecanvas" height="250px" width="500px"></div>
+			<table id="table_items">
 				<tr> <th>Item name</th> <th>Description</th> <th>Links</th> </tr>
 #foreach( $item in $storage.getItems() )
 				<tr>
@@ -20,6 +23,22 @@
 #end
 			</table>
 
-		<p><a href="/ItemHelper/new">Create new component</a>
+			<script>
+				grid = new webix.ui({
+				    view:"datatable",
+					autoheight:true,
+					autowidth:true
+				});
+				grid.parse("table_items", "htmltable");
+			</script>
+
+		<p><form action="/ItemHelper/new" id="form" method="POST" >
+			<label id="label_form" form="form">Add new component</label>
+			<label id="label_name" for="input_name">Name</label>
+			<input type="text" id="input_name" name="name" minlength="3" maxlength="30"></input>
+			<label id="label_description" for="input_description">Description</label>
+			<input type="text" id="input_description" name="description" minlength="3" maxlength="50" cols="50"></input>
+			<button id="submit" type="submit">Submit</button>
+		</form>
 	</body>
 </html>

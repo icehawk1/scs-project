@@ -1,6 +1,6 @@
 package de.mhaug.scsproject;
 
-import de.mhaug.scsproject.view.BlockDiagrammDefinitionResource;
+import de.mhaug.scsproject.view.ItemListResource;
 import de.mhaug.scsproject.view.VelocityResource;
 
 import java.sql.Connection;
@@ -18,7 +18,7 @@ public class TestModule extends AbstractModule {
 
 	@Override
 	protected void configure() {
-		bind(VelocityResource.class).to(BlockDiagrammDefinitionResource.class);
+		bind(VelocityResource.class).to(ItemListResource.class);
 		bind(WebDriver.class).to(FirefoxDriver.class);
 	}
 
