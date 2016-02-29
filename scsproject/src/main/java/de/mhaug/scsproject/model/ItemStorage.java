@@ -98,7 +98,8 @@ public class ItemStorage {
 	 * the user can't accidently destroy the integrity of this object.
 	 */
 	public Collection<FmecaItem> getItems() {
-		return Collections.unmodifiableCollection(internalStorage.values());
+		Collection<FmecaItem> result = Collections.unmodifiableCollection(internalStorage.values());
+		return result;
 	}
 
 	public int size() {

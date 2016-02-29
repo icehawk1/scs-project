@@ -3,6 +3,8 @@
     <head>
 		<meta http-equiv="Content-Type" content="text/html; charset=${charset}" />
 		<link href="/staticfiles/editor.css" rel="stylesheet" type="text/css" />
+		<script src="/staticfiles/ckeditor/ckeditor.js"></script>
+
 		<title>Editing item ${itemid}</title>
 	</head>
 	<body id="body">
@@ -18,6 +20,12 @@
 				<button id="reset" type="reset">Reset</button>
 				<button id="submit" type="submit">Submit</button>
 			</form>
+
+			<script>
+                // Replace the <textarea id="editor1"> with a CKEditor
+                // instance, using default configuration.
+                CKEDITOR.replace( 'input_${field}' );
+            </script>
 
 #parse( "currentinput.html" )
 	</body>

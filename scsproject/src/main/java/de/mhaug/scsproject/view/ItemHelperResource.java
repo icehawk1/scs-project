@@ -71,8 +71,12 @@ public class ItemHelperResource {
 	@Path("save")
 	@Produces(MediaType.TEXT_HTML)
 	public String acceptSaveRequest(@QueryParam("filename") String filename) throws URISyntaxException, IOException {
-		storage.save(filename);
-		return "Storage was saved to: " + filename;
+		if (filename != null && !filename.isEmpty()) {
+			storage.save(filename);
+			return "Storage was saved to: " + filename;
+		} else {
+			return "Invalid filename: " + filename;
+		}
 	}
 
 	/**
@@ -82,7 +86,11 @@ public class ItemHelperResource {
 	@Path("load")
 	@Produces(MediaType.TEXT_HTML)
 	public String acceptLoadRequest(@QueryParam("filename") String filename) throws URISyntaxException, IOException {
-		storage.load(filename);
-		return "Storage was loaded from: " + filename;
+		if (filename != null && !filename.isEmpty()) {
+			storage.load(filename);
+			return "Storage was loaded from: " + filename;
+		} else {
+			return "Invalid filename: " + filename;
+		}
 	}
 }

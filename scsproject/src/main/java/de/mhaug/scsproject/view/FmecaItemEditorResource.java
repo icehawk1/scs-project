@@ -127,6 +127,7 @@ public class FmecaItemEditorResource extends VelocityResource {
 
 			// Store the stuff that the user has typed in the form
 			// and then redirect him to the next step
+			// failuremode = Jsoup.parse(failuremode).text();
 			if (storage.contains(itemid)) {
 				URI nextPage = new URI("/ItemList/" + itemid + "/get-consequences");
 				System.out.println("set failure mode: " + failuremode);
@@ -155,6 +156,7 @@ public class FmecaItemEditorResource extends VelocityResource {
 
 			// Store the stuff that the user has typed in the form
 			// and then redirect him to the next step
+			// consequences = Jsoup.parse(consequences).text();
 			if (storage.contains(itemid)) {
 				URI nextPage = new URI("/ItemList/" + itemid + "/get-criticality");
 				System.out.println("set consequences: " + consequences);
@@ -232,6 +234,7 @@ public class FmecaItemEditorResource extends VelocityResource {
 
 			// Store the stuff that the user has typed in the form
 			// and then redirect him to the next step
+			// mitigations = Jsoup.parse(mitigations).text();
 			if (storage.contains(itemid)) {
 				URI nextPage = new URI("/ItemList/" + itemid + "/get-summary");
 				System.out.println("set mitigations: " + mitigations);
