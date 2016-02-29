@@ -32,13 +32,13 @@
 				grid.parse("table_items", "htmltable");
 			</script>
 
-		<p><form action="/ItemHelper/new" id="form" method="POST" >
-			<label id="label_form" form="form">Add new component</label>
-			<label id="label_name" for="input_name">Name</label>
-			<input type="text" id="input_name" name="name" minlength="3" maxlength="30"></input>
-			<label id="label_description" for="input_description">Description</label>
-			<input type="text" id="input_description" name="description" minlength="3" maxlength="50" cols="50"></input>
+		<p>Add new component:<br>
+			<form action="/ItemHelper/new" id="form" method="POST" >
+			<table>
+				<tr> <td>Name:</td> <td colspan="2"><input type="text" id="input_name" name="name" minlength="3" maxlength="30"></input></td> <td></td> </tr>
+				<tr> <td>Description:</td> <td colspan="2"><input type="text" id="input_description" name="description" minlength="3" maxlength="50" cols="50"></input></td> <td></td> </tr>
+			</table>
 			<button id="submit" type="submit">Submit</button>
-		</form>
+			</form>
 	</body>
 </html>
