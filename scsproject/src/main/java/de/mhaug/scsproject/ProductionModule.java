@@ -21,6 +21,7 @@ public class ProductionModule extends AbstractModule {
 		result.put("webix-jsfile", "/staticfiles/webix/webix_debug.js");
 		result.put("webix-cssfile", "/staticfiles/webix/webix.css");
 		result.put("charset", "UTF-8");
+		result.put("jsoup", new HtmlRemover());
 
 		return result;
 	}
