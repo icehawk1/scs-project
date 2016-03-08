@@ -30,7 +30,7 @@ public class ProductionModule extends AbstractModule {
 	private VelocityEngine provideVelocityEngine() {
 		VelocityEngine result = new VelocityEngine();
 		Properties props = new Properties();
-		props.setProperty("file.resource.loader.path", "src/resources/templates");
+		props.setProperty("file.resource.loader.path", "src/resources/templates,resources/templates");
 		props.setProperty("file.resource.loader.modificationCheckInterval", "5");
 		props.setProperty("runtime.references.strict", "true");
 		props.setProperty("runtime.references.strict.escape", "true");

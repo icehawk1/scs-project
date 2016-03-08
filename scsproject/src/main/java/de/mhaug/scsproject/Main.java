@@ -8,6 +8,8 @@ import java.io.IOException;
 import java.net.URI;
 import java.sql.SQLException;
 
+import javax.ws.rs.ProcessingException;
+
 import org.glassfish.grizzly.http.server.HttpServer;
 import org.glassfish.grizzly.http.server.StaticHttpHandler;
 import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpServerFactory;
@@ -32,7 +34,7 @@ public class Main {
 	/**
 	 * Defines if this application should be executed in debug mode.
 	 */
-	public static final boolean debug_mode = true;
+	public static final boolean debug_mode = false;
 
 	/**
 	 * Main method.
@@ -60,6 +62,7 @@ public class Main {
 	 * @return Grizzly HTTP server.
 	 */
 	public void startServer() {
+		try {
 		// create a resource config that scans for JAX-RS resources and
 		// providers in de.mhaug.scsproject package
 		final ResourceConfig rc = new ResourceConfig().packages("de.mhaug.scsproject.webui");
@@ -72,6 +75,7 @@ public class Main {
 		// Add handler which serves static files
 		server.getServerConfiguration().addHttpHandler(new StaticHttpHandler("src/resources/staticfiles"),
 				"/staticfiles");
+		} catch(ProcessingException ex){System.err.println("Could not start server: "+ex.getMessage());}
 	}
 
 	/**
